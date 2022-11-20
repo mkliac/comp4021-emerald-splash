@@ -95,11 +95,11 @@ const MenuPanel = (function() {
         });
 
         $("#button-help").on("click", () => {
-
+            HelpPanel.show();
         });
 
         $("#button-leaderboard").on("click", () => {
-
+            LearderboardPanel.show();
         });
     };
 
@@ -159,6 +159,7 @@ const GamePanel = (function() {
         currentUser = Authentication.getUser();
 
         if(currentUser.username == players.player1 || currentUser.username == players.player2){
+            StartPanel.hide();
             show();
         }
     }
@@ -210,7 +211,7 @@ const UI = (function() {
     };
 
     // The components of the UI are put here
-    const components = [SignInForm, MenuPanel];
+    const components = [SignInForm, MenuPanel, GamePanel, StartPanel];
 
     // This function initializes the UI
     const initialize = function() {
