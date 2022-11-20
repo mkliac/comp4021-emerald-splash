@@ -99,7 +99,7 @@ const MenuPanel = (function() {
         });
 
         $("#button-leaderboard").on("click", () => {
-            LearderboardPanel.show();
+            LeaderboardPanel.show();
         });
     };
 
@@ -131,14 +131,12 @@ const StartPanel = (function() {
         $("#start-panel").hide();
 
         $("#start-panel-exit").on("click", () => {
-            //Todo: leave the pair-up queue
             Socket.leavePairUpQueue();
             hide();
         });
     };
 
     const show = function(){
-        //Todo: enter the pair-up queue
         Socket.enterPairUpQueue();
         $("#start-panel").fadeIn(500);
     };
@@ -148,6 +146,68 @@ const StartPanel = (function() {
     };
 
     return {initialize, show, hide};
+})();
+
+const HelpPanel = (function() {
+    const initialize = function(){
+        $("#help-panel").hide();
+
+        $("#help-panel-exit").on("click", () => {
+            hide();
+        });
+    };
+
+    const show = function(){
+        $("#help-panel").fadeIn(500);
+    };
+
+    const hide = function(){
+        $("#help-panel").fadeOut(500);
+    };
+
+    return {initialize, show, hide};
+})();
+
+const LeaderboardPanel = (function() {
+
+    let leaderboardList = null;
+
+    const initialize = function(){
+        $("#leaderboard-panel").hide();
+
+        leaderboardList = $("#leaderboard-list");
+
+        $("#leaderboard-panel-exit").on("click", () => {
+            hide();
+        });
+    };
+
+    const show = function(){
+        $("#leaderboard-panel").fadeIn(500);
+    };
+
+    const hide = function(){
+        $("#leaderboard-panel").fadeOut(500);
+    };
+
+    const update = function(players) {
+        leaderboardList.empty();
+
+        for (const player of players){
+            addPlayer(player);
+        }
+    };
+
+    const addPlayer = function(player) {
+        //Todo: player name & its win rate
+        leaderboardList.append(
+            $("<div></div>")
+        );
+
+        leaderboardList.scrollTop(leaderboardList[0].scrollHeight);
+    };
+
+    return {initialize, show, hide, update, addPlayer};
 })();
 
 const GamePanel = (function() {
@@ -175,33 +235,6 @@ const GamePanel = (function() {
 
     return {initialize, startTheGame, show, hide};
 })();
-// const ChatPanel = (function() {
-// 	// This stores the chat area
-//     let chatArea = null;
-//     let id = null;
-//     // This function initializes the UI
-//     const initialize = function() {
-// 		// Set up the chat area
-// 		chatArea = $("#chat-area");
-
-//         $("#chat-input-form").on("submit", (e) => {
-//             // Do not submit the form
-//             e.preventDefault();
-
-// 			// Clear the message
-//             //$("#chat-input").val("");
-//         });
-
-//  	};
-
-//     // This function updates the chatroom area
-//     const update = function(chatroom) {
-//         // Clear the online users area
-//         chatArea.empty();
-//     };
-
-//     return { initialize, update};
-// })();
 
 const UI = (function() {
     // This function gets the user display
@@ -211,7 +244,7 @@ const UI = (function() {
     };
 
     // The components of the UI are put here
-    const components = [SignInForm, MenuPanel, GamePanel, StartPanel];
+    const components = [SignInForm, MenuPanel, GamePanel, StartPanel, HelpPanel, LeaderboardPanel];
 
     // This function initializes the UI
     const initialize = function() {
