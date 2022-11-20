@@ -18,8 +18,8 @@ const SignInForm = (function() {
             Authentication.signin(username, password,
                 () => {
                     hide();
-                    UserPanel.update(Authentication.getUser());
-                    UserPanel.show();
+                    MenuPanel.update(Authentication.getUser());
+                    MenuPanel.show();
 
                     Socket.connect();
                 },
@@ -71,14 +71,14 @@ const SignInForm = (function() {
     return { initialize, show, hide };
 })();
 
-const UserPanel = (function() {
+const MenuPanel = (function() {
     // This function initializes the UI
     const initialize = function() {
         // Hide it
         $("#user-panel").hide();
 
         // Click event for the signout button
-        $("#signout-button").on("click", () => {
+        $("#button-signout").on("click", () => {
             // Send a signout request
             Authentication.signout(
                 () => {
@@ -88,6 +88,18 @@ const UserPanel = (function() {
                     SignInForm.show();
                 }
             );
+        });
+
+        $("#button-start").on("click", () => {
+            StartPanel.show();
+        });
+
+        $("#button-help").on("click", () => {
+
+        });
+
+        $("#button-leaderboard").on("click", () => {
+
         });
     };
 
@@ -104,43 +116,91 @@ const UserPanel = (function() {
     // This function updates the user panel
     const update = function(user) {
         if (user) {
-            $("#user-panel .user-name").text(user.name);
+            $("#menu-username").text(user.name);
         }
         else {
-            $("#user-panel .user-name").text("");
+            $("#menu-username").text("");
         }
     };
 
     return { initialize, show, hide, update };
 })();
 
-const ChatPanel = (function() {
-	// This stores the chat area
-    let chatArea = null;
-    let id = null;
-    // This function initializes the UI
-    const initialize = function() {
-		// Set up the chat area
-		chatArea = $("#chat-area");
+const StartPanel = (function() {
+    const initialize = function(){
+        $("#start-panel").hide();
 
-        $("#chat-input-form").on("submit", (e) => {
-            // Do not submit the form
-            e.preventDefault();
-
-			// Clear the message
-            //$("#chat-input").val("");
+        $("#start-panel-exit").on("click", () => {
+            //Todo: leave the pair-up queue
+            Socket.leavePairUpQueue();
+            hide();
         });
-
- 	};
-
-    // This function updates the chatroom area
-    const update = function(chatroom) {
-        // Clear the online users area
-        chatArea.empty();
     };
 
-    return { initialize, update};
+    const show = function(){
+        //Todo: enter the pair-up queue
+        Socket.enterPairUpQueue();
+        $("#start-panel").fadeIn(500);
+    };
+
+    const hide = function(){
+        $("#start-panel").fadeOut(500);
+    };
+
+    return {initialize, show, hide};
 })();
+
+const GamePanel = (function() {
+    const initialize = function(){
+
+    };
+
+    const startTheGame = function(players){
+        currentUser = Authentication.getUser();
+
+        if(currentUser.username == players.player1 || currentUser.username == players.player2){
+            show();
+        }
+    }
+
+    const show = function(){
+        currentUser = Authentication.getUser();
+        console.log(currentUser.username,"start");
+    }
+
+    const hide = function(){
+
+    }
+
+    return {initialize, startTheGame, show, hide};
+})();
+// const ChatPanel = (function() {
+// 	// This stores the chat area
+//     let chatArea = null;
+//     let id = null;
+//     // This function initializes the UI
+//     const initialize = function() {
+// 		// Set up the chat area
+// 		chatArea = $("#chat-area");
+
+//         $("#chat-input-form").on("submit", (e) => {
+//             // Do not submit the form
+//             e.preventDefault();
+
+// 			// Clear the message
+//             //$("#chat-input").val("");
+//         });
+
+//  	};
+
+//     // This function updates the chatroom area
+//     const update = function(chatroom) {
+//         // Clear the online users area
+//         chatArea.empty();
+//     };
+
+//     return { initialize, update};
+// })();
 
 const UI = (function() {
     // This function gets the user display
@@ -150,7 +210,7 @@ const UI = (function() {
     };
 
     // The components of the UI are put here
-    const components = [SignInForm, UserPanel, ChatPanel];
+    const components = [SignInForm, MenuPanel];
 
     // This function initializes the UI
     const initialize = function() {

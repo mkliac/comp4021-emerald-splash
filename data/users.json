@@ -6,5 +6,9 @@
  "charlie2": {
   "name": "lmk2",
   "password": "$2b$10$pcdKOHtrl1qItCnp5u6El.FFnWx5m6yRN/mqS34w7Gv4y3tuZOray"
+ },
+ "charlie3": {
+  "name": "lmk3",
+  "password": "$2b$10$YLbh4rtDncaBj9o2095aaef1SfkGbnnPOW7i3saj65O9Hce9tlkgC"
  }
 }

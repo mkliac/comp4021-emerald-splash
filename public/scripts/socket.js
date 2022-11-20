@@ -16,6 +16,11 @@ const Socket = (function() {
             console.log(1);
         });
 
+        socket.on("enter the game", (players) => {
+            //players = JSON.parse(players);
+
+            GamePanel.startTheGame(players);
+        });
     };
 
     // This function disconnects the socket from the server
@@ -24,5 +29,17 @@ const Socket = (function() {
         socket = null;
     };
 
-    return { getSocket, connect, disconnect};
+    const enterPairUpQueue = function() {
+        if(socket && socket.connected) {
+            socket.emit("enter pair-up queue");
+        }
+    }
+
+    const leavePairUpQueue = function() {
+        if(socket && socket.connected) {
+            socket.emit("leave pair-up queue");
+        }
+    }
+
+    return { getSocket, connect, disconnect, enterPairUpQueue, leavePairUpQueue};
 })();

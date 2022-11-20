@@ -7,33 +7,18 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
-    <div id="container" class="col">
-        <div id="header" class="row">
-            <div id="title">The Chatroom
-                <span class="material-icons">chat</span>
+    <div id="menu">
+        <div id="main-menu">
+            <div id="menu-title">Game Title</div>
+            <div id="user-panel">
+                <div id="menu-username"></div>
+                <div id="menu-user-winrate"></div>
             </div>
-
-            <div class="spacer-grow"></div>
-
-            <div id="user-panel" class="row">
-                <div class="field-content row shadow">
-                    <span class="user-name">-</span>
-                </div>
-                <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
-            </div>
-        </div>
-
-        <div id="main-panel" class="row">
-            <div id="chat-panel" class="col">
-                <div id="chat-area" class="col"></div>
-                <form id="chat-input-form" autocomplete="off">
-                    <div id="typing-message"></div>
-                    <input id="chat-input" placeholder="Enter your message"></input>
-                </form>
-            </div>
-
-            <div id="online-users-panel" class="col">
-                <div id="online-users-area" class="col"></div>
+            <div id="menu-option">
+                <button id="button-start">START</button>
+                <button id="button-help">HELP</button>
+                <button id="button-leaderboard">LEARDERBOARD</button>
+                <button id="button-signout">LOG OUT</button>
             </div>
         </div>
     </div>
@@ -81,8 +66,8 @@
         Authentication.validate(
             () => {
                 SignInForm.hide();
-                UserPanel.update(Authentication.getUser());
-                UserPanel.show();
+                MenuPanel.update(Authentication.getUser());
+                MenuPanel.show();
 
                 Socket.connect();
             },
