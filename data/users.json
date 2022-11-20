@@ -1,0 +1,10 @@
+{
+ "charlie": {
+  "name": "lmk",
+  "password": "$2b$10$87VRSQxczWYlX39SrOwqNe4o2H116qpaVtSe/.poY61YjQxHh8Tli"
+ },
+ "charlie2": {
+  "name": "lmk2",
+  "password": "$2b$10$pcdKOHtrl1qItCnp5u6El.FFnWx5m6yRN/mqS34w7Gv4y3tuZOray"
+ }
+}
