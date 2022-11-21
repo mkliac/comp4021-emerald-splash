@@ -210,31 +210,31 @@ const LeaderboardPanel = (function() {
     return {initialize, show, hide, update, addPlayer};
 })();
 
-const GamePanel = (function() {
-    const initialize = function(){
+// const GamePanel = (function() {
+//     const initialize = function(){
 
-    };
+//     };
 
-    const startTheGame = function(players){
-        currentUser = Authentication.getUser();
+//     const startTheGame = function(players){
+//         currentUser = Authentication.getUser();
 
-        if(currentUser.username == players.player1 || currentUser.username == players.player2){
-            StartPanel.hide();
-            show();
-        }
-    }
+//         if(currentUser.username == players.player1 || currentUser.username == players.player2){
+//             StartPanel.hide();
+//             show();
+//         }
+//     }
 
-    const show = function(){
-        currentUser = Authentication.getUser();
-        console.log(currentUser.username,"start");
-    }
+//     const show = function(){
+//         currentUser = Authentication.getUser();
+//         console.log(currentUser.username,"start");
+//     }
 
-    const hide = function(){
+//     const hide = function(){
 
-    }
+//     }
 
-    return {initialize, startTheGame, show, hide};
-})();
+//     return {initialize, startTheGame, show, hide};
+// })();
 
 const UI = (function() {
     // This function gets the user display
