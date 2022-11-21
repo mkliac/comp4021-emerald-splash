@@ -158,21 +158,6 @@ io.on("connection", (socket) => {
         pairUpQueue.splice(pairUpQueue.indexOf(username), 1);
     });
 
-    // socket.on("move left", () => {
-    //     io.emit("p2 move left", JSON.stringify(socket.request.session.user));
-    // });
-
-    // socket.on("move up", () => {
-    //     io.emit("p2 move up", JSON.stringify(socket.request.session.user));
-    // });
-
-    // socket.on("move right", () => {
-    //     io.emit("p2 move right", JSON.stringify(socket.request.session.user));
-    // });
-
-    // socket.on("move down", () => {
-    //     io.emit("p2 move down", JSON.stringify(socket.request.session.user));
-    // });
     socket.on("set canvas", (canvas) => {
 
         io.emit("set p2 canvas", JSON.stringify(socket.request.session.user), canvas);

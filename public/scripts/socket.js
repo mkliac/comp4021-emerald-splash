@@ -47,40 +47,11 @@ const Socket = (function() {
         }
     }
 
-    const moveLeft = function(){
-        if(socket && socket.connected){
-            socket.emit("move left");
-        }
-    }
-
-    const moveUp = function(){
-        if(socket && socket.connected){
-            socket.emit("move up");
-        }
-    }
-
-    const moveRight = function(){
-        if(socket && socket.connected){
-            socket.emit("move right");
-        }
-    }
-
-    const moveDown = function(){
-        if(socket && socket.connected){
-            socket.emit("move down");
-        }
-    }
-
-    const newGem = function(gem){
-        if(socket && socket.connected){
-            socket.emit("new gem", gem);
-        }
-    }
     const setP2Canvas = function(canvas){
         if(socket && socket.connected){
             socket.emit("set canvas", canvas);
         }
     }
     return { getSocket, connect, disconnect, enterPairUpQueue, leavePairUpQueue,
-            moveLeft, moveUp, moveRight, moveDown, newGem, setP2Canvas};
+            setP2Canvas};
 })();
