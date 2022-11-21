@@ -27,6 +27,22 @@ const Socket = (function() {
 
             GamePanel.p2SetCanvas(user, canvas);
         });
+
+        socket.on("win message", (username) => {
+            //Todo: ui win message to username
+            console.log(username, "win");
+        });
+
+        socket.on("fair message", (username) => {
+            //Todo: ui fair message to username
+            console.log(username, "fair");
+        });
+
+        socket.on("lose message", (username) => {
+            //Todo: ui lose message to username
+            console.log(username, "lose");
+        });
+
     };
 
     // This function disconnects the socket from the server
@@ -52,6 +68,13 @@ const Socket = (function() {
             socket.emit("set canvas", canvas);
         }
     }
+
+    //Todo: get the score and send to server
+    const endGame = function(opponent, score){
+        if(socket && socket.connected){
+            socket.emit("end game", opponent, score);
+        }
+    }
     return { getSocket, connect, disconnect, enterPairUpQueue, leavePairUpQueue,
-            setP2Canvas};
+            setP2Canvas, endGame};
 })();

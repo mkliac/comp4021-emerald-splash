@@ -1,6 +1,6 @@
 const GamePanel = (function() {
     
-    const totalGameTime = 240;
+    const totalGameTime = 5;
     const gemMaxAge = 3000;
     let opponent = null;
 
@@ -52,6 +52,8 @@ const GamePanel = (function() {
         let collectedGems = 0;
         let gameStartTime = 0;      // The timestamp when the game starts
         let hp = 5;
+        let gameover = false;
+
         let numfire = 0;
         let numBomb = 0;
         let numArrow = 0;
@@ -82,12 +84,20 @@ const GamePanel = (function() {
             const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
             $("#time-remaining").text(timeRemaining);
 
-            if (timeRemaining <= 0){
+            if(timeRemaining <= 0) gameover = true;
+
+            //Check Game-over
+            if(gameover == true){
                 sounds.collect.pause();
                 sounds.background.pause();
                 sounds.gameover.play();
                 $("#final-gems").html(collectedGems);
                 $("#game-over").show();
+                
+                //Todo: ask socket send the score and opponent to server
+                Socket.endGame(opponent, JSON.stringify(collectedGems));
+                opponent = null;
+                GameControl = null;
                 return;
             }
 
@@ -156,7 +166,15 @@ const GamePanel = (function() {
             image.src = canvas;
         }
         
-        return {setP2Canvas};
+        const setGameover = function(){
+            gameover = true;
+        }
+
+        const getScore = function(){
+            return collectedGems;
+        }
+
+        return {setP2Canvas, setGameover, getScore};
     }
 
     return {initialize, startTheGame, show, hide, p2SetCanvas};

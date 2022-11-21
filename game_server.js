@@ -113,6 +113,7 @@ const io = new Server(httpServer);
 
 const onlineUsers = {}
 var pairUpQueue = []
+const results = {}
 io.use((socket, next) => {
     chatSession(socket.request, {}, next);
 });
@@ -162,6 +163,33 @@ io.on("connection", (socket) => {
 
         io.emit("set p2 canvas", JSON.stringify(socket.request.session.user), canvas);
     });
+
+    socket.on("end game", (opponentUsername, score) => {
+        const {username} = socket.request.session.user;
+        score = JSON.parse(score);
+
+        if(!(opponentUsername in results)){
+            results[username] = score;
+            return;
+        }
+        if(results[opponentUsername] > score){
+            //Todo save win & lose to record
+            io.emit("win message", opponentUsername);
+            io.emit("lose message", username);
+        }else if(results[opponentUsername] == score){
+            //Todo save win & lose to record
+            io.emit("fair message", opponentUsername);
+            io.emit("fair message", username);
+        }else{
+            //Todo save win & lose to record
+            io.emit("lose message", opponentUsername);
+            io.emit("win message", username);
+        }
+
+        delete results[opponentUsername];
+
+        //Todo: update clients leaderboard
+    })
 
 });
 
