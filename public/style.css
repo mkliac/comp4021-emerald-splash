@@ -261,15 +261,22 @@ button.icon:active {
     position: relative;
     font-family: "Press Start 2P", sans-serif;
 }
-canvas, #counter, #game-start, #game-over {
+canvas {
+    position: relative;
+    top: 5px;
+    left: 5px;
+    right:5px;
+    bottom: 5px;
+}
+#counter, #game-start, #game-over {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 5px;
+    left: 5px;
 }
 canvas, #game-start, #game-over {
     border: 1px solid gray;
-    width: 854px;
-    height: 90vh;
+    width: 49vw;
+    height: 99vh;
 }
 canvas {
     background: url(resources/background.png);
