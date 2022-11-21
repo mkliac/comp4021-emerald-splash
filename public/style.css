@@ -269,7 +269,7 @@ canvas, #counter, #game-start, #game-over {
 canvas, #game-start, #game-over {
     border: 1px solid gray;
     width: 854px;
-    height: 480px;
+    height: 90vh;
 }
 canvas {
     background: url(resources/background.png);

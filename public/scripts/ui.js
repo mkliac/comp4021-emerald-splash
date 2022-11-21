@@ -105,12 +105,12 @@ const MenuPanel = (function() {
 
     // This function shows the form with the user
     const show = function(user) {
-        $("#user-panel").show();
+        $("#main-menu").show();
     };
 
     // This function hides the form
     const hide = function() {
-        $("#user-panel").hide();
+        $("#main-menu").hide();
     };
 
     // This function updates the user panel

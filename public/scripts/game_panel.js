@@ -22,6 +22,7 @@ const GamePanel = (function() {
         if(currentUser.username == players.player1) opponent = players.player2;
         else opponent = players.player1;
 
+        MenuPanel.hide();
         StartPanel.hide();
         show();
 
@@ -39,7 +40,7 @@ const GamePanel = (function() {
     }
 
     const gameflow = function(){
-        
+
     }
 
     return {initialize, startTheGame, show, hide};
