@@ -25,15 +25,21 @@ const Gem = function(ctx, x, y, color) {
 
     // This is the birth time of the gem for finding its age.
     let birthTime = performance.now();
-
+    let curColor = null;
     // This function sets the color of the gem.
     // - `color` - The colour of the gem which can be
     // `"green"`, `"red"`, `"yellow"` or `"purple"`
     const setColor = function(color) {
         sprite.setSequence(sequences[color]);
         birthTime = performance.now();
+        curColor = color;
     };
-
+    const getInfo = function(){
+        const {x,y} = getXY();
+        const color = curColor;
+        
+        return {color,x,y}; 
+    }
     // This function gets the age (in millisecond) of the gem.
     // - `now` - The current timestamp
     const getAge = function(now) {
@@ -61,6 +67,7 @@ const Gem = function(ctx, x, y, color) {
         getBoundingBox: sprite.getBoundingBox,
         randomize: randomize,
         draw: sprite.draw,
-        update: sprite.update
+        update: sprite.update,
+        getInfo: getInfo
     };
 };

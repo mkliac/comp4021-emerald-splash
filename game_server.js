@@ -151,13 +151,31 @@ io.on("connection", (socket) => {
             pairUpQueue = pairUpQueue.slice(2); //remove first 2 players in the queue
             io.emit("enter the game", players);
         }
-        console.log(pairUpQueue,1);
     });
 
     socket.on("leave pair-up queue", () => {
         const {username} = socket.request.session.user;
         pairUpQueue.splice(pairUpQueue.indexOf(username), 1);
-        console.log(pairUpQueue,2);
+    });
+
+    // socket.on("move left", () => {
+    //     io.emit("p2 move left", JSON.stringify(socket.request.session.user));
+    // });
+
+    // socket.on("move up", () => {
+    //     io.emit("p2 move up", JSON.stringify(socket.request.session.user));
+    // });
+
+    // socket.on("move right", () => {
+    //     io.emit("p2 move right", JSON.stringify(socket.request.session.user));
+    // });
+
+    // socket.on("move down", () => {
+    //     io.emit("p2 move down", JSON.stringify(socket.request.session.user));
+    // });
+    socket.on("set canvas", (canvas) => {
+
+        io.emit("set p2 canvas", JSON.stringify(socket.request.session.user), canvas);
     });
 
 });

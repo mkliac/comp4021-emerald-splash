@@ -7,6 +7,8 @@ const GamePanel = (function() {
     const initialize = function(){
         hide();
     };
+    
+    let GameControl = null;
 
     const startTheGame = function(players){
         currentUser = Authentication.getUser();
@@ -21,7 +23,8 @@ const GamePanel = (function() {
         StartPanel.hide();
         show();
 
-        gameflow();
+        GameControl = gameflow();
+
     }
 
     const show = function(){
@@ -34,17 +37,24 @@ const GamePanel = (function() {
         $("#game-container").hide();
     }
 
+    const p2SetCanvas = function(user, canvas){
+        if(opponent == user.username)
+            GameControl.setP2Canvas(canvas);
+    }
+
     const gameflow = function(){
         /* Get the canvas and 2D context */
-        const cv = $("canvas").get(0);
-        const context = cv.getContext("2d");
+        const cv1 = $("canvas").get(0);
+        const context1 = cv1.getContext("2d");
+        const cv2 = $("canvas").get(1);
+        const context2 = cv2.getContext("2d");
 
-        let collectedGems = 0;
+        let collectedGems = [0,0];
         let gameStartTime = 0;      // The timestamp when the game starts
-        let hp = 5;
-        let numfire = 0;
-        let numBomb = 0;
-        let numArrow = 0;
+        let hp = [5,5];
+        let numfire = [0,0];
+        let numBomb = [0,0];
+        let numArrow = [0,0];
 
         /* Create the sounds */
         const sounds = {
@@ -54,14 +64,19 @@ const GamePanel = (function() {
         };
 
         /* Create the game area */
-        const gameArea = BoundingBox(context, 165, 60, 420, 800);
-
+        const gameArea1 = BoundingBox(context1, 165, 60, 420, 800);
+        const gameArea2 = BoundingBox(context2, 165, 60, 420, 800);
         /* Create the sprites in the game */
-        const player = Player(context, 427, 240, gameArea); // The player
-        const gem = Gem(context, 427, 350, "green");        // The gem
-        corners = gameArea.getPoints();
-        const fires = []
-        const bombs = []
+        const player1 = Player(context1, 427, 240, gameArea1); // The player
+        const player2 = Player(context2, 427, 240, gameArea2); // The player
+        const gem1 = Gem(context1, 427, 350, "green");        // The gem
+        const gem2 = Gem(context2, 427, 350, "green");        // The gem
+        corners1 = gameArea1.getPoints();
+        corners2 = gameArea2.getPoints();
+        let fires1 = []
+        let fires2 = []
+        let bombs1 = []
+        let bombs2 = []
 
         /* The main processing of the game */
         function doFrame(now) {
@@ -77,46 +92,53 @@ const GamePanel = (function() {
                 sounds.collect.pause();
                 sounds.background.pause();
                 sounds.gameover.play();
-                $("#final-gems").html(collectedGems);
+                $("#final-gems").html(collectedGems[0]);
                 $("#game-over").show();
                 return;
             }
 
             /* Update the sprites */
-            gem.update(now);
-            player.update(now);
+            gem1.update(now);
+            player1.update(now);
+            //gem2.update(now);
+            //player2.update(now);
 
-            if(gem.getAge(now) > gemMaxAge)
-                gem.randomize(gameArea);
+            if(gem1.getAge(now) > gemMaxAge){
+                gem1.randomize(gameArea1);
+                //Socket.newGem(JSON.stringtify(gem1.getInfo()));
+            }
 
-            const {x,y} = gem.getXY();
-            const box = player.getBoundingBox();
+            const {x,y} = gem1.getXY();
+            const box = player1.getBoundingBox();
             if (box.isPointInBox(x, y)) {
                 sounds.collect.currentTime = 0;
-                console.log("cpt");
                 sounds.collect.play();
-                collectedGems++;
-                gem.randomize(gameArea);
+                collectedGems[0]++;
+                gem1.randomize(gameArea1);
+                //Socket.newGem(JSON.stringtify(gem1.getInfo()));
             }
             /* Clear the screen */
-            context.clearRect(0, 0, cv.width, cv.height);
-
+            context1.clearRect(0, 0, cv1.width, cv1.height);
+            //context2.clearRect(0, 0, cv2.width, cv2.height);
             /* Draw the sprites */
-            gem.draw();
-            player.draw();
+            gem1.draw();
+            player1.draw();
+            //context2.drawImage(cv1, 0,0);
+            //gem2.draw();
+            //player2.draw();
             /* Process the next frame */
+            Socket.setP2Canvas(cv1.toDataURL());
             requestAnimationFrame(doFrame);
         }
         sounds.background.play();
         /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function(event) {
-            console.log(1);
             switch (event.keyCode) {
-                case 37: player.move(1); break;
-                case 38: player.move(2); break;
-                case 39: player.move(3); break;
-                case 40: player.move(4); break;
-                case 32: player.speedUp(); break;
+                case 37: player1.move(1); break;
+                case 38: player1.move(2); break;
+                case 39: player1.move(3); break;
+                case 40: player1.move(4); break;
+                case 32: player1.speedUp(); break;
             }
 
         });
@@ -125,18 +147,53 @@ const GamePanel = (function() {
         $(document).on("keyup", function(event) {
 
             switch (event.keyCode) {
-                case 37: player.stop(1); break;
-                case 38: player.stop(2); break;
-                case 39: player.stop(3); break;
-                case 40: player.stop(4); break;
-                case 32: player.slowDown(); break;
+                case 37: player1.stop(1); break;
+                case 38: player1.stop(2); break;
+                case 39: player1.stop(3); break;
+                case 40: player1.stop(4); break;
+                case 32: player1.slowDown(); break;
             }
 
         });
-        gem.randomize(gameArea);
+
+
+        gem1.randomize(gameArea1);
         /* Start the game */
         requestAnimationFrame(doFrame);
+
+        //P2 Control
+
+        const setP2Canvas = function(canvas){
+            let image = new Image();
+            image.onload = function() {
+                context2.clearRect(0, 0, cv2.width, cv2.height);
+                context2.drawImage(image,0,0);
+            };
+            image.src = canvas;
+        }
+        // const p2MoveLeft = function(){
+        //     player2.move(1);
+        // }
+
+        // const p2MoveUp = function(){
+        //     player2.move(2);
+        // }
+
+        // const p2MoveRight = function(){
+        //     player2.move(3);
+        // }
+
+        // const p2MoveDown = function(){
+        //     player2.move(4);
+        // }
+
+        // const p2GenerateNewGem = function(color, x, y){
+        //     gem2.setColor(color);
+        //     gem2.setXY(x,y);
+        // }  
+        
+        return {setP2Canvas};
     }
 
-    return {initialize, startTheGame, show, hide};
+    return {initialize, startTheGame, show, hide, p2SetCanvas};
 })();

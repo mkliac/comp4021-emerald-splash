@@ -21,6 +21,12 @@ const Socket = (function() {
 
             GamePanel.startTheGame(players);
         });
+
+        socket.on("set p2 canvas", (user, canvas) => {
+            user = JSON.parse(user);
+
+            GamePanel.p2SetCanvas(user, canvas);
+        });
     };
 
     // This function disconnects the socket from the server
@@ -41,5 +47,40 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, disconnect, enterPairUpQueue, leavePairUpQueue};
+    const moveLeft = function(){
+        if(socket && socket.connected){
+            socket.emit("move left");
+        }
+    }
+
+    const moveUp = function(){
+        if(socket && socket.connected){
+            socket.emit("move up");
+        }
+    }
+
+    const moveRight = function(){
+        if(socket && socket.connected){
+            socket.emit("move right");
+        }
+    }
+
+    const moveDown = function(){
+        if(socket && socket.connected){
+            socket.emit("move down");
+        }
+    }
+
+    const newGem = function(gem){
+        if(socket && socket.connected){
+            socket.emit("new gem", gem);
+        }
+    }
+    const setP2Canvas = function(canvas){
+        if(socket && socket.connected){
+            socket.emit("set canvas", canvas);
+        }
+    }
+    return { getSocket, connect, disconnect, enterPairUpQueue, leavePairUpQueue,
+            moveLeft, moveUp, moveRight, moveDown, newGem, setP2Canvas};
 })();
