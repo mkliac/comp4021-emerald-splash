@@ -3,12 +3,11 @@ const GamePanel = (function() {
     const totalGameTime = 5;
     const gemMaxAge = 3000;
     let opponent = null;
+    let GameControl = null;
 
     const initialize = function(){
         hide();
     };
-    
-    let GameControl = null;
 
     const startTheGame = function(players){
         currentUser = Authentication.getUser();
@@ -92,7 +91,7 @@ const GamePanel = (function() {
                 sounds.background.pause();
                 sounds.gameover.play();
                 $("#final-gems").html(collectedGems);
-                $("#game-over").show();
+                //$("#game-over").show();
                 
                 //Todo: ask socket send the score and opponent to server
                 Socket.endGame(opponent, JSON.stringify(collectedGems));

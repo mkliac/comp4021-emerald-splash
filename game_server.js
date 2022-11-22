@@ -122,7 +122,6 @@ io.on("connection", (socket) => {
     if(socket.request.session.user) {
         const {username, name} = socket.request.session.user;
         onlineUsers[username] = {name};
-        console.log(onlineUsers,1);
 
         io.emit("add user", JSON.stringify(socket.request.session.user));
     }
@@ -131,7 +130,6 @@ io.on("connection", (socket) => {
         if(socket.request.session.user){
             const {username} = socket.request.session.user;
             if(onlineUsers[username]) delete onlineUsers[username];
-            console.log(onlineUsers,2);
 
             pairUpQueue.splice(pairUpQueue.indexOf(username), 1);
             // io.emit("remove user", JSON.stringify(socket.request.session.user));
@@ -139,7 +137,6 @@ io.on("connection", (socket) => {
     })
 
     socket.on("enter pair-up queue", () => {
-        console.log("enter");
         const {username} = socket.request.session.user;
         pairUpQueue.push(username);
 

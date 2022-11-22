@@ -84,7 +84,7 @@ const MenuPanel = (function() {
                 () => {
                     Socket.disconnect();
 
-                    hide();
+                    $("#user-panel").hide();
                     SignInForm.show();
                 }
             );
@@ -104,7 +104,8 @@ const MenuPanel = (function() {
     };
 
     // This function shows the form with the user
-    const show = function(user) {
+    const show = function() {
+        $("#user-panel").show();
         $("#main-menu").show();
     };
 
@@ -210,31 +211,71 @@ const LeaderboardPanel = (function() {
     return {initialize, show, hide, update, addPlayer};
 })();
 
-// const GamePanel = (function() {
-//     const initialize = function(){
+const WinPanel = (function(){
+    const initialize = function(){
+        $("#win-panel").hide();
 
-//     };
+        $("#win-panel-exit").on("click", () => {
+            hide();
+            GamePanel.hide();
+            MenuPanel.show();
+        });
+    };
 
-//     const startTheGame = function(players){
-//         currentUser = Authentication.getUser();
+    const show = function(){
+        $("#win-panel").fadeIn(500);
+    };
 
-//         if(currentUser.username == players.player1 || currentUser.username == players.player2){
-//             StartPanel.hide();
-//             show();
-//         }
-//     }
+    const hide = function(){
+        $("#win-panel").fadeOut(500);
+    };
 
-//     const show = function(){
-//         currentUser = Authentication.getUser();
-//         console.log(currentUser.username,"start");
-//     }
+    return {initialize, show, hide};   
+})();
 
-//     const hide = function(){
+const FairPanel = (function(){
+    const initialize = function(){
+        $("#fair-panel").hide();
 
-//     }
+        $("#fair-panel-exit").on("click", () => {
+            hide();
+            GamePanel.hide();
+            MenuPanel.show();
+        });
+    };
 
-//     return {initialize, startTheGame, show, hide};
-// })();
+    const show = function(){
+        $("#fair-panel").fadeIn(500);
+    };
+
+    const hide = function(){
+        $("#fair-panel").fadeOut(500);
+    };
+
+    return {initialize, show, hide};
+})();
+
+const LosePanel = (function(){
+    const initialize = function(){
+        $("#lose-panel").hide();
+
+        $("#lose-panel-exit").on("click", () => {
+            hide();
+            GamePanel.hide();
+            MenuPanel.show();
+        });
+    };
+
+    const show = function(){
+        $("#lose-panel").fadeIn(500);
+    };
+
+    const hide = function(){
+        $("#lose-panel").fadeOut(500);
+    };
+
+    return {initialize, show, hide};
+})();
 
 const UI = (function() {
     // This function gets the user display
@@ -244,7 +285,8 @@ const UI = (function() {
     };
 
     // The components of the UI are put here
-    const components = [SignInForm, MenuPanel, GamePanel, StartPanel, HelpPanel, LeaderboardPanel];
+    const components = [SignInForm, MenuPanel, GamePanel, StartPanel, HelpPanel, LeaderboardPanel,
+                        WinPanel, FairPanel, LosePanel];
 
     // This function initializes the UI
     const initialize = function() {

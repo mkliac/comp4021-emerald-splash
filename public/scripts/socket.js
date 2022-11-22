@@ -29,18 +29,18 @@ const Socket = (function() {
         });
 
         socket.on("win message", (username) => {
-            //Todo: ui win message to username
-            console.log(username, "win");
+            if(Authentication.getUser().username == username)
+                WinPanel.show();
         });
 
         socket.on("fair message", (username) => {
-            //Todo: ui fair message to username
-            console.log(username, "fair");
+            if(Authentication.getUser().username == username)
+                FairPanel.show();
         });
 
         socket.on("lose message", (username) => {
-            //Todo: ui lose message to username
-            console.log(username, "lose");
+            if(Authentication.getUser().username == username)
+                LosePanel.show();
         });
 
     };

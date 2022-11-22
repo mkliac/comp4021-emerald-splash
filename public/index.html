@@ -110,20 +110,6 @@
                 TIME:<tspan id="time-remaining"></tspan>
             </text>
         </svg>
-
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
-            <defs>
-                <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0.2" stop-color="red" />
-                    <stop offset="0.4" stop-color="yellow" />
-                    <stop offset="0.6" stop-color="green" />
-                    <stop offset="0.8" stop-color="purple" />
-                </linearGradient>
-            </defs>
-            <text id="game-title" x="50%" y="45%">GEM RUSH!</text>
-            <text x="50%" y="60%">Click here to start the game</text>
-        </svg> -->
-
         <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
             <defs>
                 <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
@@ -138,6 +124,18 @@
                 gem(s).
             </text>
         </svg>
+    </div>
+    <div id="win-panel" class="overlay row">
+        <div id="win-message">WIN</div>
+        <button id="win-panel-exit">X</button>
+    </div>
+    <div id="fair-panel" class="overlay row">
+        <div id="fair-message">FAIR</div>
+        <button id="fair-panel-exit">X</button>
+    </div>
+    <div id="lose-panel" class="overlay row">
+        <div id="lose-message">LOSE</div>
+        <button id="lose-panel-exit">X</button>
     </div>
 
     <script src="/socket.io/socket.io.min.js"></script>
