@@ -31,7 +31,6 @@ const Gem = function(ctx, x, y, color) {
     const setColor = function(color) {
         sprite.setSequence(sequences[color]);
         birthTime = performance.now();
-        curColor = color;
     };
     // This function gets the age (in millisecond) of the gem.
     // - `now` - The current timestamp

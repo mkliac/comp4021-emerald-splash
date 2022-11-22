@@ -17,15 +17,28 @@ const Socket = (function() {
         });
 
         socket.on("enter the game", (players) => {
-            //players = JSON.parse(players);
 
             GamePanel.startTheGame(players);
         });
 
-        socket.on("set p2 canvas", (user, canvas) => {
-            user = JSON.parse(user);
+        socket.on("set p2 canvas", (username, canvas) => {
+            if(username == GamePanel.getOpponent())
+                GamePanel.getGameControl().setP2Canvas(canvas);
+        });
 
-            GamePanel.p2SetCanvas(user, canvas);
+        socket.on("slow down", (username) => {
+            if(username == GamePanel.getOpponent())
+                GamePanel.getGameControl().slowDown();
+        });
+
+        socket.on("add zombie", (username) => {
+            if(username == GamePanel.getOpponent())
+                GamePanel.getGameControl().addZombie();
+        });
+
+        socket.on("add fire", (username, x, y) => {
+            if(username == GamePanel.getOpponent())
+                GamePanel.getGameControl().addFire(x,y);
         });
 
         socket.on("win message", (username) => {
@@ -69,12 +82,31 @@ const Socket = (function() {
         }
     }
 
-    //Todo: get the score and send to server
+    const requestSlowDown = function(){
+        if(socket && socket.connected){
+            socket.emit("request slow down");
+        }
+    }
+
+    const requestZombie = function(){
+        if(socket && socket.connected){
+            socket.emit("request zombie");
+        }
+    }
+
+    const requestFire = function(XY){
+        const {x, y} = XY;
+        
+        if(socket && socket.connected){
+            socket.emit("request fire", x, y);
+        }
+    }
+
     const endGame = function(opponent, score){
         if(socket && socket.connected){
             socket.emit("end game", opponent, score);
         }
     }
     return { getSocket, connect, disconnect, enterPairUpQueue, leavePairUpQueue,
-            setP2Canvas, endGame};
+            setP2Canvas, requestSlowDown, requestZombie, requestFire, endGame};
 })();

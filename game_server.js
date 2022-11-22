@@ -157,8 +157,27 @@ io.on("connection", (socket) => {
     });
 
     socket.on("set canvas", (canvas) => {
+        const {username} = socket.request.session.user;
 
-        io.emit("set p2 canvas", JSON.stringify(socket.request.session.user), canvas);
+        io.emit("set p2 canvas", username, canvas);
+    });
+
+    socket.on("request slow down", () => {
+        const {username} = socket.request.session.user;
+
+        io.emit("slow down", username);
+    });
+
+    socket.on("request zombie", () => {
+        const {username} = socket.request.session.user;
+
+        io.emit("add zombie", username);
+    });
+
+    socket.on("request fire", (x, y) => {
+        const {username} = socket.request.session.user;
+
+        io.emit("add fire", username, x, y);
     });
 
     socket.on("end game", (opponentUsername, score) => {

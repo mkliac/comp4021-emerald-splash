@@ -40,7 +40,7 @@ const Player = function(ctx, x, y, gameArea) {
     let direction = 0;
 
     // This is the moving speed (pixels per second) of the player
-    let speed = 150;
+    let speed = 200;
 
     // This function sets the player's moving direction.
     // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
@@ -72,12 +72,14 @@ const Player = function(ctx, x, y, gameArea) {
 
     // This function speeds up the player.
     const speedUp = function() {
-        speed = 250;
+        if(speed + 25 <= 500)
+            speed += 25;
     };
 
     // This function slows down the player.
     const slowDown = function() {
-        speed = 150;
+        if(speed - 25 >= 100)
+            speed -= 25;
     };
 
     // This function updates the player depending on his movement.
@@ -112,6 +114,7 @@ const Player = function(ctx, x, y, gameArea) {
         slowDown: slowDown,
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
-        update: update
+        update: update,
+        getXY: sprite.getXY
     };
 };
