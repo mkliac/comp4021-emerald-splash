@@ -7,42 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <link rel="shortcut icon" href="#">
-    <!-- <style>
-    #game-container {
-        position: relative;
-        font-family: "Press Start 2P", sans-serif;
-    }
-    canvas, #counter, #game-over {
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        right:5px;
-        bottom: 5px;
-    }
-    canvas, #game-over {
-        border: 1px solid gray;
-        width: 45vw;
-        height: 99vh;
-    }
-    canvas {
-        background: url(resources/background.png);
-        background-size: cover;
-    }
-    #game-over {
-        background: rgba(1, 1, 1, 0.8);
-    }
-    #counter text {
-        font-size: 130%;
-        fill: white;
-        stroke: black;
-        stroke-width: 1px;
-    }
-    #game-over text {
-        font-size: 120%;
-        fill: url(#game-over-fill);
-        text-anchor: middle;
-    }
-    </style> -->
 </head>
 <body>
     <div id="menu">
@@ -103,8 +67,8 @@
         </div>
     </div>
     <div id="game-container">
-        <canvas width="854px" height="480px"></canvas>
-        <canvas width="854px" height="480px"></canvas>
+        <canvas id = "canvas1" width="1000px" height="1000px"></canvas>
+        <canvas id = "canvas2" width="1000px" height="1000px"></canvas>
         <svg xmlns="http://www.w3.org/2000/svg" id="counter">
             <text x="10" y="35">
                 TIME:<tspan id="time-remaining"></tspan>

@@ -72,7 +72,8 @@ const GamePanel = (function() {
         };
 
         /* Create the game area */
-        const gameArea = BoundingBox(context1, 165, 60, 420, 800);
+        //const gameArea = BoundingBox(context1, 165, 60, 420, 800);
+        const gameArea = BoundingBox(context1, 200, 40, 960, 960);
         /* Create the sprites in the game */
         const player = Player(context1, 427, 240, gameArea); // The player
         const gem = Gem(context1, 427, 350, "green");        // The gem
