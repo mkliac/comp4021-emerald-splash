@@ -37,7 +37,7 @@ const Item = function(ctx, x, y, type) {
     };
 
     const randomize = function(area) {
-        const types = ["fire"];
+        const types = ["zombie"];
         setType(types[Math.floor(Math.random() * 1)]);
         /* Randomize the position */
         const {x, y} = area.randomPoint();

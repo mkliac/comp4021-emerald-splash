@@ -80,6 +80,7 @@ const GamePanel = (function() {
 
         let items = []
         let fires = []
+        let zombies = []
         let bombs = []
         let arrows = []
 
@@ -145,6 +146,17 @@ const GamePanel = (function() {
                 }
             }
 
+            for(let i = 0; i < zombies.length; i++){
+                const {x, y} = zombies[i].getXY();
+                
+                if(!isShield && box.isPointInBox(x, y)){
+                    hp -= 1;
+                    console.log(hp);
+                    shield();
+                    break;
+                }
+            }
+
             for(let i = 0; i < items.length; i++){
                 const {x, y} = items[i].getXY();
                 
@@ -154,6 +166,7 @@ const GamePanel = (function() {
                     break;
                 }
             }
+
             /* Clear the screen */
             context1.clearRect(0, 0, cv1.width, cv1.height);
             /* Draw the sprites */
@@ -163,6 +176,11 @@ const GamePanel = (function() {
                 items[i].draw();
             for(let i = 0; i < fires.length; i++)
                 fires[i].draw();
+            for(let i = 0; i < zombies.length; i++){
+                zombies[i].move(player.getXY());
+                zombies[i].update(now);
+                zombies[i].draw();
+            }
 
             /* Process the next frame */
             Socket.setP2Canvas(cv1.toDataURL());
@@ -198,7 +216,7 @@ const GamePanel = (function() {
         requestAnimationFrame(doFrame);
 
         const addItems = function(){
-            items.push(new Item(context1,427,350,"speed"));
+            items.push(new Item(context1,0,0,"speed"));
             items[items.length-1].randomize(gameArea);
 
             setTimeout(addItems, 8000);
@@ -214,7 +232,7 @@ const GamePanel = (function() {
             }else if(type == "shield"){
                 shield();
             }else if(type == "zombie"){
-                Socket.addZombie();
+                Socket.requestZombie();
             }else if(type == "fire"){
                 numFire += 3;
             }else if(type == "bomb"){
@@ -262,7 +280,8 @@ const GamePanel = (function() {
         }
 
         const addZombie = function(){
-
+            zombies.push(new Zombie(context1, 0, 0, gameArea));
+            zombies[zombies.length-1].randomize(gameArea);
         }
 
         const addFire = function(x,y){
