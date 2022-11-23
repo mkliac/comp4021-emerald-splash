@@ -40,7 +40,7 @@ const Zombie = function(ctx, x, y, gameArea) {
     let direction = 0;
 
     // This is the moving speed (pixels per second) of the player
-    let speed = 50;
+    let speed = 175;
 
     const dist2D = function(x1,x2,y1,y2){
         return ((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));

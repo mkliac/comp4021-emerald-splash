@@ -2,6 +2,8 @@ const GamePanel = (function() {
     
     const totalGameTime = 100;
     const gemMaxAge = 3000;
+    const fps = 40;
+
     let opponent = null;
     let GameControl = null;
 
@@ -43,12 +45,58 @@ const GamePanel = (function() {
         return GameControl;
     }
 
+    /* Get the canvas and 2D context */
+    const cv1 = $("canvas").get(0);
+    const context1 = cv1.getContext("2d");
+    const cv2 = $("canvas").get(1);
+    const context2 = cv2.getContext("2d");
+    /* Create the sounds */
+    const sounds = {
+        background: new Audio("resources/game_music.mp3"),
+        collect: new Audio("resources/collect.mp3"),
+        gameover: new Audio("resources/gameover.mp3"),
+        item: new Audio("resources/collect_item.wav"),
+        fire: new Audio("resources/fire.wav"),
+        double: new Audio("resources/double.wav"),
+        speed: new Audio("resources/speed.wav"),
+        slow: new Audio("resources/slow.wav"),
+        zombie: new Audio("resources/zombie.mp3"),
+        shield: new Audio("resources/shield.mp3"),
+        damage: new Audio("resources/damage.wav")
+    };
+
+    const objectSheet = new Image();
+    objectSheet.src = "resources/object_sprites.png";
+
+    objectSheet.onload = function(){
+        context1.fillStyle = "black";
+        context1.fillRect(0,0,600,120);
+        context1.strokeStyle = "gray";
+        context1.moveTo(0,120); context1.lineTo(600,120);
+        context1.lineWidth = 1;
+        context1.stroke();
+        context1.lineWidth = 5;
+        context1.strokeRect(100,25,75,75);
+        context1.strokeRect(175,25,75,75);
+        context1.strokeRect(250,25,75,75);
+
+        context1.drawImage(objectSheet,80,160,16,16,105,30,60,60);
+        context1.drawImage(objectSheet,128,48,16,16,175,30,60,60);
+        context1.drawImage(objectSheet,0,48,16,16,245,30,60,60);
+        context1.drawImage(objectSheet,192,0,16,16,20,25,60,60);
+        //hp shield double
+        context1.drawImage(objectSheet,0,16,16,16,350,25,60,60);
+        context1.drawImage(objectSheet,16,0,16,16,420,25,60,60);
+        context1.drawImage(objectSheet,192,64,16,16,490,25,60,60);
+
+        context1.lineWidth = 1;
+        context1.font = '20px sans-serif';
+        context1.strokeText("A", 156,92);
+        context1.strokeText("S", 231,92);
+        context1.strokeText("D", 306,92);
+    }
+
     const gameflow = function(){
-        /* Get the canvas and 2D context */
-        const cv1 = $("canvas").get(0);
-        const context1 = cv1.getContext("2d");
-        const cv2 = $("canvas").get(1);
-        const context2 = cv2.getContext("2d");
 
         let collectedGems = 0;
         let gameStartTime = 0;      // The timestamp when the game starts
@@ -64,16 +112,9 @@ const GamePanel = (function() {
         let isDouble = false;
         let isShield = false;
 
-        /* Create the sounds */
-        const sounds = {
-            background: new Audio("resources/background.mp3"),
-            collect: new Audio("resources/collect.mp3"),
-            gameover: new Audio("resources/gameover.mp3")
-        };
-
         /* Create the game area */
         //const gameArea = BoundingBox(context1, 165, 60, 420, 800);
-        const gameArea = BoundingBox(context1, 200, 40, 960, 960);
+        const gameArea = BoundingBox(context1, 150, 40, 560, 560);
         /* Create the sprites in the game */
         const player = Player(context1, 427, 240, gameArea); // The player
         const gem = Gem(context1, 427, 350, "green");        // The gem
@@ -99,9 +140,13 @@ const GamePanel = (function() {
 
             //Check Game-over
             if(gameover == true){
-                sounds.collect.pause();
-                sounds.background.pause();
+                for(let sound in sounds){
+                    sounds[sound].currentTime = 0;
+                    sounds[sound].pause();
+                }
+
                 sounds.gameover.play();
+                
                 $("#final-gems").html(collectedGems);
                 //$("#game-over").show();
                 
@@ -140,6 +185,8 @@ const GamePanel = (function() {
                 const {x, y} = fires[i].getXY();
                 
                 if(!isShield && box.isPointInBox(x, y)){
+                    sounds.damage.currentTime = 0;
+                    sounds.damage.play();
                     hp -= 1;
                     console.log(hp);
                     shield();
@@ -151,6 +198,8 @@ const GamePanel = (function() {
                 const {x, y} = zombies[i].getXY();
                 
                 if(!isShield && box.isPointInBox(x, y)){
+                    sounds.damage.currentTime = 0;
+                    sounds.damage.play();
                     hp -= 1;
                     console.log(hp);
                     shield();
@@ -162,6 +211,8 @@ const GamePanel = (function() {
                 const {x, y} = items[i].getXY();
                 
                 if(box.isPointInBox(x, y)){
+                    sounds.item.currentTime = 0;
+                    sounds.item.play();
                     onCollectItem(items[i].getType());
                     items.splice(i, 1);
                     break;
@@ -169,7 +220,8 @@ const GamePanel = (function() {
             }
 
             /* Clear the screen */
-            context1.clearRect(0, 0, cv1.width, cv1.height);
+            context1.clearRect(0, 125, cv1.width, 475);
+            updateStatus();
             /* Draw the sprites */
             gem.draw();
             player.draw();
@@ -185,7 +237,7 @@ const GamePanel = (function() {
 
             /* Process the next frame */
             Socket.setP2Canvas(cv1.toDataURL());
-            requestAnimationFrame(doFrame);
+            setTimeout(() => {requestAnimationFrame(doFrame)}, 1000/fps);
         }
         sounds.background.play();
         /* Handle the keydown of arrow keys and spacebar */
@@ -196,7 +248,13 @@ const GamePanel = (function() {
                 case 39: player.move(3); break;
                 case 40: player.move(4); break;
                 case 32: double();shield(); break; //cheat key
-                case 65: if(numFire > 0) {numFire -= 1; Socket.requestFire(player.getXY())}; break;
+                case 65: 
+                    if(numFire > 0) {
+                        sounds.fire.currentTime = 0;
+                        sounds.fire.play();
+                        numFire -= 1; Socket.requestFire(player.getXY())
+                    }; 
+                    break;
             }
         });
 
@@ -211,35 +269,64 @@ const GamePanel = (function() {
             }
         });
 
-
         gem.randomize(gameArea);
         /* Start the game */
         requestAnimationFrame(doFrame);
 
+        const updateStatus = function(){
+            context1.fillRect(155, 28, 17, 18);
+            context1.strokeText(numFire, 156,43);
+            context1.fillRect(230, 28, 17, 18);
+            context1.strokeText(numBomb, 231,43);
+            context1.fillRect(305, 28, 17, 18);
+            context1.strokeText(numArrow, 306,43);
+            context1.fillRect(39,83,51,18);
+            context1.strokeText(collectedGems, 40,100);
+            context1.fillRect(369,83,51,18);
+            context1.strokeText(hp, 370,100);
+            context1.fillRect(429,83,51,18);
+            if(isShield) context1.strokeText("ON", 430,100);
+            else context1.strokeText("OFF", 430,100);
+            context1.fillRect(499,83,51,18);
+            if(isDouble) context1.strokeText("ON", 500,100);
+            else context1.strokeText("OFF", 500,100);
+        };
         const addItems = function(){
-            items.push(new Item(context1,0,0,"speed"));
-            items[items.length-1].randomize(gameArea);
-
-            setTimeout(addItems, 8000);
+            if(items.length < 3){
+                items.push(new Item(context1,0,0,"speed"));
+                items[items.length-1].randomize(gameArea);
+            }
+            setTimeout(addItems, 5000);
         }
         addItems();
+
         const onCollectItem = function(type){
             if(type == "speed"){
+                sounds.speed.currentTime = 0;
+                sounds.speed.play();
                 speedUp();
             }else if(type == "double"){
+                sounds.double.currentTime = 0;
+                sounds.double.play();
                 double();
             }else if(type == "slow"){
+                sounds.slow.currentTime = 0;
+                sounds.slow.play();
                 Socket.requestSlowDown();
             }else if(type == "shield"){
+                sounds.shield.currentTime = 0;
+                sounds.shield.play();
                 shield();
             }else if(type == "zombie"){
+                sounds.zombie.currentTime = 0;
+                sounds.zombie.play();
                 Socket.requestZombie();
             }else if(type == "fire"){
-                numFire += 3;
+                numFire = Math.min(numFire+2,9);
             }else if(type == "bomb"){
-                numBomb += 1;
+                numBomb = Math.min(numBomb+1,9);
             }else if(type == "arrow"){
-                numArrow += 1;
+                numArrow = Math.min(numArrow+1,9);
             }
         }
         //P2 canvas update
