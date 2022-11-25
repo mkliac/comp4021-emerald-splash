@@ -38,8 +38,8 @@ const Item = function(ctx, x, y, type) {
 
     const randomize = function(area) {
         const types = ["speed","double","slow","shield","zombie","fire","bomb","arrow"];
-        //setType(types[Math.floor(Math.random() * 8)]);
-        setType("arrow");
+        setType(types[Math.floor(Math.random() * 8)]);
+        //setType("arrow");
         /* Randomize the position */
         const {x, y} = area.randomPoint();
         sprite.setXY(x, y);

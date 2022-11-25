@@ -5,7 +5,7 @@ const GamePanel = (function() {
     const arrowMaxAge = 2500;
     const bombMaxAge = 1500;
     const bombExplosionAge = 900;
-    const fps = 40;
+    const fps = 60;
 
     let opponent = null;
     let GameControl = null;
@@ -51,6 +51,7 @@ const GamePanel = (function() {
     /* Get the canvas and 2D context */
     const cv1 = $("canvas").get(0);
     const context1 = cv1.getContext("2d");
+    const context1Bg = cv1.cloneNode().getContext("2d");
     const cv2 = $("canvas").get(1);
     const context2 = cv2.getContext("2d");
     /* Create the sounds */
@@ -74,31 +75,36 @@ const GamePanel = (function() {
     objectSheet.src = "resources/object_sprites.png";
 
     objectSheet.onload = function(){
-        context1.fillStyle = "black";
-        context1.fillRect(0,0,600,120);
-        context1.strokeStyle = "gray";
-        context1.moveTo(0,120); context1.lineTo(600,120);
-        context1.lineWidth = 1;
-        context1.stroke();
-        context1.lineWidth = 5;
-        context1.strokeRect(100,25,75,75);
-        context1.strokeRect(175,25,75,75);
-        context1.strokeRect(250,25,75,75);
+        context1Bg.fillStyle = "black";
+        context1Bg.fillRect(0,0,600,120);
+        context1Bg.strokeStyle = "gray";
+        context1Bg.moveTo(0,120); context1.lineTo(600,120);
+        context1Bg.lineWidth = 1;
+        context1Bg.stroke();
+        context1Bg.lineWidth = 5;
+        context1Bg.strokeRect(100,25,75,75);
+        context1Bg.strokeRect(175,25,75,75);
+        context1Bg.strokeRect(250,25,75,75);
 
-        context1.drawImage(objectSheet,80,160,16,16,105,30,60,60);
-        context1.drawImage(objectSheet,128,48,16,16,175,30,60,60);
-        context1.drawImage(objectSheet,0,48,16,16,245,30,60,60);
-        context1.drawImage(objectSheet,192,0,16,16,20,25,60,60);
+        context1Bg.drawImage(objectSheet,80,160,16,16,105,30,60,60);
+        context1Bg.drawImage(objectSheet,128,48,16,16,175,30,60,60);
+        context1Bg.drawImage(objectSheet,0,48,16,16,245,30,60,60);
+        context1Bg.drawImage(objectSheet,192,0,16,16,20,25,60,60);
         //hp shield double
-        context1.drawImage(objectSheet,0,16,16,16,350,25,60,60);
-        context1.drawImage(objectSheet,16,0,16,16,420,25,60,60);
-        context1.drawImage(objectSheet,192,64,16,16,490,25,60,60);
+        context1Bg.drawImage(objectSheet,0,16,16,16,350,25,60,60);
+        context1Bg.drawImage(objectSheet,16,0,16,16,420,25,60,60);
+        context1Bg.drawImage(objectSheet,192,64,16,16,490,25,60,60);
 
+        context1Bg.lineWidth = 1;
+        context1Bg.font = '20px sans-serif';
+        context1Bg.strokeText("A", 156,92);
+        context1Bg.strokeText("S", 231,92);
+        context1Bg.strokeText("D", 306,92);
+
+        context1.fillStyle = "black";
+        context1.strokeStyle = "gray";
         context1.lineWidth = 1;
         context1.font = '20px sans-serif';
-        context1.strokeText("A", 156,92);
-        context1.strokeText("S", 231,92);
-        context1.strokeText("D", 306,92);
     }
 
     const gameflow = function(){
@@ -118,7 +124,6 @@ const GamePanel = (function() {
         let isShield = false;
 
         /* Create the game area */
-        //const gameArea = BoundingBox(context1, 165, 60, 420, 800);
         const gameArea = BoundingBox(context1, 150, 40, 560, 560);
         /* Create the sprites in the game */
         const player = Player(context1, 427, 240, gameArea); // The player
@@ -261,18 +266,20 @@ const GamePanel = (function() {
                     sounds.item.play();
                     onCollectItem(items[i].getType());
                     items.splice(i, 1);
+                    //clear away the taken object
+                    context1Bg.clearRect(x - 12, y - 16, x + 12, y + 12);
                     break;
                 }
             }
 
             /* Clear the screen */
-            context1.clearRect(0, 125, cv1.width, 475);
+            context1.clearRect(0, 0, cv1.width, cv1.height);
+            context1.drawImage(context1Bg.canvas, 0,0);
             updateStatus();
+
             /* Draw the sprites */
             gem.draw();
             player.draw();
-            for(let i = 0; i < items.length; i++)
-                items[i].draw();
             for(let i = 0; i < fires.length; i++)
                 fires[i].draw();
             for(let i = 0; i < bombs.length; i++)
@@ -358,8 +365,9 @@ const GamePanel = (function() {
         };
         const addItems = function(){
             if(items.length < 3){
-                items.push(new Item(context1,0,0,"speed"));
+                items.push(new Item(context1Bg,0,0,"speed"));
                 items[items.length-1].randomize(gameArea);
+                items[items.length-1].draw();
             }
             setTimeout(addItems, 5000);
         }

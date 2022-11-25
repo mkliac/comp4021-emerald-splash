@@ -26,7 +26,9 @@ const Sprite = function(ctx, x, y) {
     // This is the scaling factor to determine the size of the shadow, relative to the scaled sprite image size.
     // - `x` - The x scaling factor
     // - `y` - The y scaling factor
+    // - offset the amount of px the shadow should be drawn higher, used for exploding bomb.
     let shadowScale = { x: 1, y: 0.25 };
+    let shadowOffset = 0;
 
     // This is the updated time of the current sprite image.
     // It is used to determine the timing to switch to the next sprite image.
@@ -72,6 +74,11 @@ const Sprite = function(ctx, x, y) {
         scale = value;
         return this;
     };
+
+    const setOffset = function(value) {
+        shadowOffset = value;
+        return this;
+    }
 
     // This function sets the scaling factor of the sprite shadow.
     // - `value` - The new scaling factor as an object
@@ -120,7 +127,7 @@ const Sprite = function(ctx, x, y) {
         ctx.fillStyle = "black";
         ctx.globalAlpha = 0.6;
         ctx.beginPath();
-        ctx.ellipse(x, y + size.height / 2,
+        ctx.ellipse(x, y - shadowOffset + size.height / 2,
                     shadowWidth / 2, shadowHeight / 2, 0, 0, 2 * Math.PI);
         ctx.fill();
 
@@ -199,6 +206,7 @@ const Sprite = function(ctx, x, y) {
         setXY: setXY,
         setSequence: setSequence,
         setScale: setScale,
+        setOffset: setOffset,
         setShadowScale: setShadowScale,
         getDisplaySize: getDisplaySize,
         getBoundingBox: getBoundingBox,

@@ -9,6 +9,7 @@ const Bomb = function(ctx, x, y) {
 
     sprite.setSequence(sequences.constant)
           .setScale(2)
+          .setOffset(32)
           .setShadowScale({ x: 0.25, y: 0.08 })
           .useSheet("resources/bomb_sprites.png");
 
