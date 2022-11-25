@@ -2,6 +2,8 @@ const GamePanel = (function() {
     
     const totalGameTime = 100;
     const gemMaxAge = 3000;
+    const bombMaxAge = 1500;
+    const bombExplosionAge = 900;
     const fps = 40;
 
     let opponent = null;
@@ -57,6 +59,7 @@ const GamePanel = (function() {
         gameover: new Audio("resources/gameover.mp3"),
         item: new Audio("resources/collect_item.wav"),
         fire: new Audio("resources/fire.wav"),
+        bomb: new Audio("resources/bomb.mp3"),
         double: new Audio("resources/double.wav"),
         speed: new Audio("resources/speed.wav"),
         slow: new Audio("resources/slow.wav"),
@@ -124,6 +127,7 @@ const GamePanel = (function() {
         let fires = []
         let zombies = []
         let bombs = []
+        let explosions = []
         let arrows = []
 
         /* The main processing of the game */
@@ -162,10 +166,16 @@ const GamePanel = (function() {
             player.update(now);
             for(let i = 0; i < fires.length; i++)
                 fires[i].update(now);
+            for(let i = 0; i < bombs.length; i++){
+                bombs[i].update(now);
+                if(bombs[i].getAge(now) > bombMaxAge){
+                    bombs.splice(i, 1);
+                }
+            }
 
             if(gem.getAge(now) > gemMaxAge){
                 gem.randomize(gameArea);
-            }            
+            } 
 
             /* Collect gem */
             const {x,y} = gem.getXY();
@@ -187,6 +197,20 @@ const GamePanel = (function() {
                 const {x, y} = fires[i].getXY();
                 
                 if(!isShield && box.isPointInBox(x, y)){
+                    sounds.damage.currentTime = 0;
+                    sounds.damage.play();
+                    hp -= 1;
+                    console.log(hp);
+                    shield();
+                    break;
+                }
+            }
+
+            for(let i = 0; i < bombs.length; i++){
+                const {x, y} = bombs[i].getXY();
+                console.log("touched bomb")
+                
+                if(!isShield && bombs[i].getAge(now) > bombExplosionAge && box.isPointInBox(x, y)){
                     sounds.damage.currentTime = 0;
                     sounds.damage.play();
                     hp -= 1;
@@ -232,6 +256,8 @@ const GamePanel = (function() {
                 items[i].draw();
             for(let i = 0; i < fires.length; i++)
                 fires[i].draw();
+            for(let i = 0; i < bombs.length; i++)
+                bombs[i].draw();
             for(let i = 0; i < zombies.length; i++){
                 zombies[i].move(player.getXY());
                 zombies[i].update(now);
@@ -257,6 +283,13 @@ const GamePanel = (function() {
                         sounds.fire.play();
                         numFire -= 1; Socket.requestFire(player.getXY())
                     }; 
+                    break;
+                case 83:
+                    if(numBomb > 0) {
+                        sounds.bomb.currentTime = 0;
+                        sounds.bomb.play();
+                        numBomb -= 1; Socket.requestBomb(player.getXY())
+                    };
                     break;
             }
         });
@@ -379,8 +412,12 @@ const GamePanel = (function() {
             fires.push(new Fire(context1, x, y));
         }
 
+        const addBomb = function(x,y){
+            bombs.push(new Bomb(context1, x, y));
+        }
+
         return {setP2Canvas, setGameover, getScore,
-                slowDown, addZombie, addFire, speedUp,
+                slowDown, addZombie, addFire, addBomb, speedUp,
                 double, shield};
     }
 

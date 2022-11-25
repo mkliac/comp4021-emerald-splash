@@ -180,6 +180,13 @@ io.on("connection", (socket) => {
         io.emit("add fire", username, x, y);
     });
 
+    socket.on("request bomb", (x, y) => {
+        const {username} = socket.request.session.user;
+        console.debug("add a bomb")
+
+        io.emit("add bomb", username, x, y);
+    });
+
     socket.on("end game", (opponentUsername, score) => {
         const {username} = socket.request.session.user;
         score = JSON.parse(score);

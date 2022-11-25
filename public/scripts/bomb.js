@@ -1,20 +1,27 @@
 const Bomb = function(ctx, x, y) {
 
     const sequences = {
-        constant:  { x: 64, y:  112, width: 16, height: 16, count: 9, timing: 50, loop: true },
+        constant:  { x: 0, y:  0, width: 48, height: 48, count: 15, timing: 80, loop: false },
     };
 
     const sprite = Sprite(ctx, x, y);
 
     sprite.setSequence(sequences.constant)
           .setScale(2)
-          .setShadowScale({ x: 0.75, y: 0.2 })
-          .useSheet("resources/object_sprites.png");
+          .setShadowScale({ x: 0.25, y: 0.08 })
+          .useSheet("resources/bomb_sprites.png");
+
+    let birthTime = performance.now();
+
+    const getAge = function(now) {
+        return now - birthTime;
+    };
 
     // The methods are returned as an object here.
     return {
         getXY: sprite.getXY,
         setXY: sprite.setXY,
+        getAge: getAge,
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
         update: sprite.update

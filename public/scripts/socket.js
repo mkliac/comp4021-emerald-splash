@@ -41,6 +41,11 @@ const Socket = (function() {
                 GamePanel.getGameControl().addFire(x,y);
         });
 
+        socket.on("add bomb", (username, x, y) => {
+            if(username == GamePanel.getOpponent())
+                GamePanel.getGameControl().addBomb(x,y);
+        });
+
         socket.on("win message", (username) => {
             if(Authentication.getUser().username == username)
                 WinPanel.show();
@@ -102,11 +107,19 @@ const Socket = (function() {
         }
     }
 
+    const requestBomb = function(XY){
+        const {x, y} = XY;
+        
+        if(socket && socket.connected){
+            socket.emit("request bomb", x, y);
+        }
+    }
+
     const endGame = function(opponent, score){
         if(socket && socket.connected){
             socket.emit("end game", opponent, score);
         }
     }
     return { getSocket, connect, disconnect, enterPairUpQueue, leavePairUpQueue,
-            setP2Canvas, requestSlowDown, requestZombie, requestFire, endGame};
+            setP2Canvas, requestSlowDown, requestZombie, requestFire, requestBomb, endGame};
 })();
