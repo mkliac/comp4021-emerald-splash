@@ -10,5 +10,13 @@
  "charlie3": {
   "name": "lmk3",
   "password": "$2b$10$YLbh4rtDncaBj9o2095aaef1SfkGbnnPOW7i3saj65O9Hce9tlkgC"
+ },
+ "kitty": {
+  "name": "kitty",
+  "password": "$2b$10$/6.CrNpaXJLpdOrghMzxrefGQW7US/TnujaGqAcewoQ1eFXHj32Z2"
+ },
+ "mouse": {
+  "name": "mouse",
+  "password": "$2b$10$SWGKoaKbZfx1dEN0/Ti9HeGXwfslfgXkmJPnRQk/TiRkivEwq8Pme"
  }
 }

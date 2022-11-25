@@ -280,10 +280,21 @@ canvas, #game-start, #game-over {
     width: 48vw;
     height: 96vh;
 }
-
-canvas {
-    background: url(resources/background_stone.jpg);
-    background-size: contain;
+#player-field {
+    background-image: radial-gradient(
+        rgba(0, 100, 255, 0.05),
+        rgba(0, 100, 255, 0.15)
+    ), url(resources/floor.png);
+    background-size: 64px 64px;
+    background-repeat: repeat;
+}
+#enemy-field {
+    background-image: radial-gradient(
+        rgba(255, 0, 0, 0.05),
+        rgba(255, 0, 0, 0.15)
+    ), url(resources/floor.png);
+    background-size: 64px 64px;
+    background-repeat: repeat;
 }
 #game-start, #game-over {
     background: rgba(1, 1, 1, 0.8);
