@@ -289,6 +289,7 @@ const GamePanel = (function() {
             Socket.setP2Canvas(cv1.toDataURL());
             setTimeout(() => {requestAnimationFrame(doFrame)}, 1000/fps);
         }
+        sounds.background.volume = 0.5;
         sounds.background.play();
         /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function(event) {
