@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
 :root {
     --material-icons-color: black;
     --field-color: gray;
@@ -24,11 +26,12 @@
     --warning-color: red;
 
     --button-color: white;
-    --button-background: #f2855d;
+    --button-background: coral;
     --button-background-hover: #f8b58b;
+    --button-border-color: #4d2e00;
 }
 * {
-    font-family: "Abel", sans-serif;
+    font-family: "VT323", monospace;
     color: var(--font-color);
     box-sizing: border-box;
 }
@@ -40,6 +43,8 @@ body {
     height: 100vh;
     padding: 0;
     margin: 0;
+    background-image: url(./resources/menu_background.png);
+    background-size: cover;
 }
 .center { text-align: center; }
 .shadow { box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.4); }
@@ -87,11 +92,12 @@ form input, form select {
     width: 100%;
 }
 input, select {
-    font-size: 1rem;
+    font-size: 1em;
     background: var(--input-background);
-    border: none;
-    border-radius: 20px;
+    border: 2px solid black;
+    border-radius: 5px;
     padding: 10px 15px;
+    box-shadow: 3px 3px 0px lightgray inset;
 }
 input::placeholder, select {
     color: gray;
@@ -99,13 +105,14 @@ input::placeholder, select {
 button {
     font-weight: bold;
     height: 40px;
-    border: 1px solid black;
+    border: 2px solid var(--button-border-color);
     color: var(--button-color);
     background: var(--button-background);
-    box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
+    box-shadow: 3px 3px 0px lightsalmon inset;
     padding: 0 20px;
     transition: 1s background;
     cursor: pointer;
+    font-size: 1.2em;
 }
 button:hover {
     background: var(--button-background-hover);
@@ -113,6 +120,15 @@ button:hover {
 button:active {
     margin: 2px -2px -2px 2px;
     box-shadow: 0px 0px;
+}
+button::after{
+    content: '';
+    display: block;
+    position: relative;
+    border-bottom: 3px solid rgb(100, 50, 0, 0.3);
+    bottom: -6px;
+    left: -20px;
+    width: calc(100% + 40px);
 }
 button.icon {
     height: inherit;
@@ -159,28 +175,39 @@ button.icon:active {
     padding: 0;
 }
 
-/* Header */
+/* Game Menu */
 #header {
     height: 80px;
     background: var(--header-background);
     padding: 0 20px;
 }
-#title {
-    font-family: Abel, sans-serif;
-    font-size: 300%;
-    text-transform: uppercase;
+#main-menu{
+    padding: 50px;
+    width: fit-content;
+}
+#menu-title{
+    font-size: 6em;
     color: var(--title-color);
     user-select: none;
 }
-#title .material-icons {
-    color: var(--title-color);
-    font-size: 36px;
-}
 #user-panel {
-    padding: 0;
+    padding: 10px;
+    display:flex;
+    justify-content: center;
 }
-#signin-user {
+#user-panel div {
     cursor: pointer;
+    font-size: 2em;
+    color: var(--title-color);
+}
+#menu-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#menu-option button {
+    width: 164px;
+    margin: 10px;
 }
 
 /* Main panel */
@@ -319,4 +346,18 @@ canvas, #game-start, #game-over {
     font-size: 120%;
     fill: url(#game-over-fill);
     text-anchor: middle;
+}
+/* 8-bit theme */
+.retro {
+    box-shadow: 5px 5px 0px rgba(245, 158, 114, 0.4) inset;
+    border: 2px solid #4d2e00;
+}
+.retro::after {
+    content: '';
+    display: block;
+    position: absolute;
+    border-bottom: 4px solid rgb(100, 50, 0, 0.4);
+    bottom: calc(50vh - 198px);
+    left: calc(50vw - 357px);
+    width: 714px;
 }
