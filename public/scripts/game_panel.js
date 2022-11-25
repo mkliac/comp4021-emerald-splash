@@ -167,6 +167,7 @@ const GamePanel = (function() {
                 gem.randomize(gameArea);
             }            
 
+            /* Collect gem */
             const {x,y} = gem.getXY();
             const box = player.getBoundingBox();
             if (box.isPointInBox(x, y)) {
@@ -181,6 +182,7 @@ const GamePanel = (function() {
                 gem.randomize(gameArea);
             }
 
+            /* Handle hostile item damages*/
             for(let i = 0; i < fires.length; i++){
                 const {x, y} = fires[i].getXY();
                 
@@ -207,6 +209,7 @@ const GamePanel = (function() {
                 }
             }
 
+            /* Collect item */
             for(let i = 0; i < items.length; i++){
                 const {x, y} = items[i].getXY();
                 
