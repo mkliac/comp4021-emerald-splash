@@ -5,13 +5,12 @@ const Bomb = function(ctx, x, y) {
     };
 
     const sprite = Sprite(ctx, x, y);
+    const birthTime = performance.now();
 
     sprite.setSequence(sequences.constant)
           .setScale(2)
           .setShadowScale({ x: 0.25, y: 0.08 })
           .useSheet("resources/bomb_sprites.png");
-
-    let birthTime = performance.now();
 
     const getAge = function(now) {
         return now - birthTime;

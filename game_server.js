@@ -182,9 +182,14 @@ io.on("connection", (socket) => {
 
     socket.on("request bomb", (x, y) => {
         const {username} = socket.request.session.user;
-        console.debug("add a bomb")
 
         io.emit("add bomb", username, x, y);
+    });
+
+    socket.on("request arrow", () => {
+        const {username} = socket.request.session.user;
+
+        io.emit("add arrow", username);
     });
 
     socket.on("end game", (opponentUsername, score) => {

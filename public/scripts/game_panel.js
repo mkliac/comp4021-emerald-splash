@@ -2,6 +2,7 @@ const GamePanel = (function() {
     
     const totalGameTime = 100;
     const gemMaxAge = 3000;
+    const arrowMaxAge = 2500;
     const bombMaxAge = 1500;
     const bombExplosionAge = 900;
     const fps = 40;
@@ -54,12 +55,13 @@ const GamePanel = (function() {
     const context2 = cv2.getContext("2d");
     /* Create the sounds */
     const sounds = {
+        arrow: new Audio("resources/arrow.mp3"),
         background: new Audio("resources/game_music.mp3"),
+        bomb: new Audio("resources/bomb.mp3"),
         collect: new Audio("resources/collect.mp3"),
         gameover: new Audio("resources/gameover.mp3"),
         item: new Audio("resources/collect_item.wav"),
         fire: new Audio("resources/fire.wav"),
-        bomb: new Audio("resources/bomb.mp3"),
         double: new Audio("resources/double.wav"),
         speed: new Audio("resources/speed.wav"),
         slow: new Audio("resources/slow.wav"),
@@ -127,7 +129,6 @@ const GamePanel = (function() {
         let fires = []
         let zombies = []
         let bombs = []
-        let explosions = []
         let arrows = []
 
         /* The main processing of the game */
@@ -172,6 +173,12 @@ const GamePanel = (function() {
                     bombs.splice(i, 1);
                 }
             }
+            for(let i = 0; i < arrows.length; i++){
+                arrows[i].update(now);
+                if(arrows[i].getAge(now) > arrowMaxAge){
+                    arrows.splice(i, 1);
+                }
+            }
 
             if(gem.getAge(now) > gemMaxAge){
                 gem.randomize(gameArea);
@@ -208,9 +215,21 @@ const GamePanel = (function() {
 
             for(let i = 0; i < bombs.length; i++){
                 const {x, y} = bombs[i].getXY();
-                console.log("touched bomb")
                 
                 if(!isShield && bombs[i].getAge(now) > bombExplosionAge && box.isPointInBox(x, y)){
+                    sounds.damage.currentTime = 0;
+                    sounds.damage.play();
+                    hp -= 1;
+                    console.log(hp);
+                    shield();
+                    break;
+                }
+            }
+
+            for(let i = 0; i < arrows.length; i++){
+                const {x, y} = arrows[i].getXY();
+                
+                if(!isShield && box.isPointInBox(x, y)){
                     sounds.damage.currentTime = 0;
                     sounds.damage.play();
                     hp -= 1;
@@ -258,6 +277,8 @@ const GamePanel = (function() {
                 fires[i].draw();
             for(let i = 0; i < bombs.length; i++)
                 bombs[i].draw();
+            for(let i = 0; i < arrows.length; i++)
+                arrows[i].draw();
             for(let i = 0; i < zombies.length; i++){
                 zombies[i].move(player.getXY());
                 zombies[i].update(now);
@@ -281,14 +302,21 @@ const GamePanel = (function() {
                     if(numFire > 0) {
                         sounds.fire.currentTime = 0;
                         sounds.fire.play();
-                        numFire -= 1; Socket.requestFire(player.getXY())
+                        numFire -= 1; Socket.requestFire(player.getXY());
                     }; 
                     break;
                 case 83:
                     if(numBomb > 0) {
                         sounds.bomb.currentTime = 0;
                         sounds.bomb.play();
-                        numBomb -= 1; Socket.requestBomb(player.getXY())
+                        numBomb -= 1; Socket.requestBomb(player.getXY());
+                    };
+                    break;
+                case 68:
+                    if(numArrow > 0) {
+                        sounds.arrow.currentTime = 0;
+                        sounds.arrow.play();
+                        numArrow -= 1; Socket.requestArrow();
                     };
                     break;
             }
@@ -416,8 +444,17 @@ const GamePanel = (function() {
             bombs.push(new Bomb(context1, x, y));
         }
 
+        const addArrow = function(){
+            let {x, y} = player.getXY()
+            console.log(x)
+            arrows.push(new Arrow(context1, x, 600, "up"));
+            arrows.push(new Arrow(context1, 0, y, "right"));
+            arrows.push(new Arrow(context1, x, 125, "down"));
+            arrows.push(new Arrow(context1, 600, y, "left"));
+        }
+
         return {setP2Canvas, setGameover, getScore,
-                slowDown, addZombie, addFire, addBomb, speedUp,
+                slowDown, addZombie, addFire, addBomb, addArrow, speedUp,
                 double, shield};
     }
 
