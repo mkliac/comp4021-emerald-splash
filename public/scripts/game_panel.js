@@ -23,6 +23,11 @@ const GamePanel = (function() {
         if(currentUser.username == players.player1) opponent = players.player2;
         else opponent = players.player1;
 
+        //Remove items from the last game
+        //Its messy to put it in this function but seems is the only way for it to not glitch at the start 
+        context1Bg.clearRect(0, 125, cv1.width, 475);
+        context1.drawImage(context1Bg.canvas, 0,0);
+
         MenuPanel.hide();
         StartPanel.hide();
         show();
@@ -266,8 +271,9 @@ const GamePanel = (function() {
                     sounds.item.play();
                     onCollectItem(items[i].getType());
                     items.splice(i, 1);
-                    //clear away the taken object
-                    context1Bg.clearRect(x - 12, y - 16, x + 12, y + 12);
+                    context1Bg.clearRect(0, 125, cv1.width, 475);
+                    for(let i = 0; i < items.length; i++)
+                        items[i].draw();
                     break;
                 }
             }
