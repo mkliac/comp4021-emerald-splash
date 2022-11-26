@@ -7,35 +7,6 @@ const GamePanel = (function() {
     const bombExplosionAge = 900;
     const fps = 60;
 
-    let opponent = null;
-    let GameControl = null;
-
-    const initialize = function(){
-        hide();
-    };
-
-    const startTheGame = function(players){
-        currentUser = Authentication.getUser();
-
-        if(currentUser.username != players.player1 && currentUser.username != players.player2)
-            return;
-   
-        if(currentUser.username == players.player1) opponent = players.player2;
-        else opponent = players.player1;
-
-        //Remove items from the last game
-        //Its messy to put it in this function but seems is the only way for it to not glitch at the start 
-        context1Bg.clearRect(0, 125, cv1.width, 475);
-        context1.drawImage(context1Bg.canvas, 0,0);
-
-        MenuPanel.hide();
-        StartPanel.hide();
-        show();
-
-        GameControl = gameflow();
-
-    }
-
     const show = function(){
         $("#game-container").show();
         currentUser = Authentication.getUser();
@@ -129,11 +100,10 @@ const GamePanel = (function() {
         let isShield = false;
 
         /* Create the game area */
-        const gameArea = BoundingBox(context1, 150, 40, 560, 560);
+        let gameArea = BoundingBox(context1, 150, 40, 560, 560);
         /* Create the sprites in the game */
-        const player = Player(context1, 427, 240, gameArea); // The player
-        const gem = Gem(context1, 427, 350, "green");        // The gem
-        corners = gameArea.getPoints();
+        let player = Player(context1, 427, 240, gameArea); // The player
+        let gem = Gem(context1, 427, 350, "green");        // The gem
 
         let items = []
         let fires = []
@@ -165,10 +135,8 @@ const GamePanel = (function() {
                 $("#final-gems").html(collectedGems);
                 //$("#game-over").show();
                 
-                //Todo: ask socket send the score and opponent to server
                 Socket.endGame(opponent, JSON.stringify(collectedGems));
                 opponent = null;
-                GameControl = null;
                 return;
             }
 
@@ -217,7 +185,6 @@ const GamePanel = (function() {
                     sounds.damage.currentTime = 0;
                     sounds.damage.play();
                     hp -= 1;
-                    console.log(hp);
                     shield();
                     break;
                 }
@@ -230,7 +197,6 @@ const GamePanel = (function() {
                     sounds.damage.currentTime = 0;
                     sounds.damage.play();
                     hp -= 1;
-                    console.log(hp);
                     shield();
                     break;
                 }
@@ -243,7 +209,6 @@ const GamePanel = (function() {
                     sounds.damage.currentTime = 0;
                     sounds.damage.play();
                     hp -= 1;
-                    console.log(hp);
                     shield();
                     break;
                 }
@@ -256,7 +221,6 @@ const GamePanel = (function() {
                     sounds.damage.currentTime = 0;
                     sounds.damage.play();
                     hp -= 1;
-                    console.log(hp);
                     shield();
                     break;
                 }
@@ -302,8 +266,7 @@ const GamePanel = (function() {
             Socket.setP2Canvas(cv1.toDataURL());
             setTimeout(() => {requestAnimationFrame(doFrame)}, 1000/fps);
         }
-        sounds.background.volume = 0.5;
-        sounds.background.play();
+
         /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function(event) {
             switch (event.keyCode) {
@@ -346,10 +309,6 @@ const GamePanel = (function() {
                 case 40: player.stop(4); break;
             }
         });
-
-        gem.randomize(gameArea);
-        /* Start the game */
-        requestAnimationFrame(doFrame);
 
         const updateStatus = function(){
             context1.fillRect(155, 28, 17, 18);
@@ -437,7 +396,7 @@ const GamePanel = (function() {
         const double = function(){
             clearTimeout(doubleTimeoutID);
             isDouble = true;
-            doubleTimeoutID = setTimeout(function() {console.log("end");isDouble=false;}, 5000);
+            doubleTimeoutID = setTimeout(function() {isDouble=false;}, 5000);
         }
 
         const shield = function(){
@@ -461,16 +420,77 @@ const GamePanel = (function() {
 
         const addArrow = function(){
             let {x, y} = player.getXY()
-            console.log(x)
             arrows.push(new Arrow(context1, x, 600, "up"));
             arrows.push(new Arrow(context1, 0, y, "right"));
             arrows.push(new Arrow(context1, x, 125, "down"));
             arrows.push(new Arrow(context1, 600, y, "left"));
         }
 
+        const restart = function(){
+            collectedGems = 0;
+            gameStartTime = 0;      // The timestamp when the game starts
+            hp = 5;
+            gameover = false;
+    
+            numFire = 0;
+            numBomb = 0;
+            numArrow = 0;
+    
+            doubleTimeoutID = null;
+            shieldTimeoutID = null;
+            isDouble = false;
+            isShield = false;
+    
+            /* Create the game area */
+            gameArea = BoundingBox(context1, 150, 40, 560, 560);
+            /* Create the sprites in the game */
+            player = Player(context1, 427, 240, gameArea); // The player
+            gem = Gem(context1, 427, 350, "green");        // The gem
+    
+            items = []
+            fires = []
+            zombies = []
+            bombs = []
+            arrows = []
+
+            sounds.background.volume = 0.5;
+            sounds.background.play();
+            gem.randomize(gameArea);
+            requestAnimationFrame(doFrame);
+        }
+
         return {setP2Canvas, setGameover, getScore,
                 slowDown, addZombie, addFire, addBomb, addArrow, speedUp,
-                double, shield};
+                double, shield,restart};
+    }
+
+    let opponent = null;
+    const GameControl = gameflow();
+
+    const initialize = function(){
+        hide();
+    };
+
+    const startTheGame = function(players){
+        currentUser = Authentication.getUser();
+
+        if(currentUser.username != players.player1 && currentUser.username != players.player2)
+            return;
+   
+        if(currentUser.username == players.player1) opponent = players.player2;
+        else opponent = players.player1;
+
+        //Remove items from the last game
+        //Its messy to put it in this function but seems is the only way for it to not glitch at the start 
+        context1Bg.clearRect(0, 125, cv1.width, 475);
+        context1.drawImage(context1Bg.canvas, 0,0);
+
+        MenuPanel.hide();
+        StartPanel.hide();
+        show();
+
+        GameControl.restart();
+
     }
 
     return {initialize, startTheGame, show, hide,
