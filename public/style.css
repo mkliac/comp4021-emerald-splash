@@ -362,6 +362,40 @@ canvas, #game-start, #game-over {
     width: 714px;
 }
 
-#leaderboard-list{
+#leaderboard-title{
+    text-align: center;
+    width: 100%;
+}
+
+.leaderboard-list-name{
+    display: inline-block;
+    text-align: center;
+    width: 49%;
+}
+
+.leaderboard-list-win{
+    display: inline-block;
+    text-align: center;
+    width: 49%;
+}
+
+.leaderboard-item{
     display: block;
+    width: 100%;
+}
+
+#leaderboard-panel{
+    overflow: auto;
+}
+
+#win-panel{
+    background:rgba(114, 182, 245, 0.8);
+}
+
+#fair-panel{
+    background:rgba(114, 245, 147, 0.8);
+}
+
+#lose-panel{
+    background:rgba(245, 129, 114, 0.8);
 }

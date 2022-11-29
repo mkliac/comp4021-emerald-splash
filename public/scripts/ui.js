@@ -192,7 +192,7 @@ const LeaderboardPanel = (function() {
     };
 
     const update = function(records) {
-        leaderboardList.empty();
+        //leaderboardList.empty();
 
         records = records.sort(function(a,b){
             return b[1] - a[1];
@@ -204,9 +204,10 @@ const LeaderboardPanel = (function() {
     };
 
     const addPlayer = function(player) {
-        //Todo: player name & its win rate
         leaderboardList.append(
-            $("<div>" + player[0] + player[1].toString() + "</div>")
+            $("<div class='leaderboard-item'></div>")
+            .append("<div class='leaderboard-list-name'>" + player[0] + "</div>")
+            .append("<div class='leaderboard-list-win'>" + player[1] + "</div>")
         );
 
         leaderboardList.scrollTop(leaderboardList[0].scrollHeight);
