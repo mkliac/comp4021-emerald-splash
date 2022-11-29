@@ -192,7 +192,7 @@ const LeaderboardPanel = (function() {
     };
 
     const update = function(records) {
-        //leaderboardList.empty();
+        leaderboardList.empty();
 
         records = records.sort(function(a,b){
             return b[1] - a[1];
@@ -204,8 +204,9 @@ const LeaderboardPanel = (function() {
     };
 
     const addPlayer = function(player) {
+        
         leaderboardList.append(
-            $("<div class='leaderboard-item'></div>")
+            $("<div class='leaderboard-item leaderboard-item-border'></div>")
             .append("<div class='leaderboard-list-name'>" + player[0] + "</div>")
             .append("<div class='leaderboard-list-win'>" + player[1] + "</div>")
         );
