@@ -1,22 +1,10 @@
 {
  "charlie": {
-  "name": "lmk",
-  "password": "$2b$10$87VRSQxczWYlX39SrOwqNe4o2H116qpaVtSe/.poY61YjQxHh8Tli"
+  "name": "lmk1",
+  "password": "$2b$10$60kc36pBNtfJvQsw5Nt6EOhWZku2ujvBEamylDG3SjZ9.XrchqwSu"
  },
  "charlie2": {
   "name": "lmk2",
-  "password": "$2b$10$pcdKOHtrl1qItCnp5u6El.FFnWx5m6yRN/mqS34w7Gv4y3tuZOray"
- },
- "charlie3": {
-  "name": "lmk3",
-  "password": "$2b$10$YLbh4rtDncaBj9o2095aaef1SfkGbnnPOW7i3saj65O9Hce9tlkgC"
- },
- "kitty": {
-  "name": "kitty",
-  "password": "$2b$10$/6.CrNpaXJLpdOrghMzxrefGQW7US/TnujaGqAcewoQ1eFXHj32Z2"
- },
- "mouse": {
-  "name": "mouse",
-  "password": "$2b$10$SWGKoaKbZfx1dEN0/Ti9HeGXwfslfgXkmJPnRQk/TiRkivEwq8Pme"
+  "password": "$2b$10$jpDyKNdbnGsGBSZrOmkvy.tK2CS5s9ZKprTqvTlrSITbq2Dh2/t8a"
  }
 }

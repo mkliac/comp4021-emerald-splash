@@ -33,7 +33,7 @@
         <div id="tutorial-content">Guideline</div>
         <button id="help-panel-exit">X</button>
     </div>
-    <div id="leaderboard-panel" class="overlay row">
+    <div id="leaderboard-panel" class="overlay row" style="z-index: 1;">
         <div id="leaderboard-title">Leaderboard</div>
         <div id="leaderboard-list"></div>
         <button id="leaderboard-panel-exit">X</button>
@@ -91,14 +91,27 @@
     </div>
     <div id="win-panel" class="overlay row">
         <div id="win-message">WIN</div>
+        <div id="score-text">YOUR SCORE:</div>
+        <div id="win-score-number"></div>
+        <button id="win-panel-restart">RESTART</button>
+        <button id="win-panel-leaderboard">LEADERBOARD</button>
         <button id="win-panel-exit">X</button>
+
     </div>
     <div id="fair-panel" class="overlay row">
         <div id="fair-message">FAIR</div>
+        <div id="score-text">YOUR SCORE:</div>
+        <div id="fair-score-number"></div>
+        <button id="fair-panel-restart">RESTART</button>
+        <button id="fair-panel-leaderboard">LEADERBOARD</button>
         <button id="fair-panel-exit">X</button>
     </div>
     <div id="lose-panel" class="overlay row">
         <div id="lose-message">LOSE</div>
+        <div id="score-text">YOUR SCORE:</div>
+        <div id="lose-score-number"></div>
+        <button id="lose-panel-restart">RESTART</button>
+        <button id="lose-panel-leaderboard">LEADERBOARD</button>
         <button id="lose-panel-exit">X</button>
     </div>
 

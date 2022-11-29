@@ -51,19 +51,26 @@ const Socket = (function() {
                 GamePanel.getGameControl().addArrow();
         });
 
-        socket.on("win message", (username) => {
-            if(Authentication.getUser().username == username)
-                WinPanel.show();
+        socket.on("win message", (username, score) => {
+            if(Authentication.getUser().username == username){
+                WinPanel.show(score);
+            }
         });
 
-        socket.on("fair message", (username) => {
-            if(Authentication.getUser().username == username)
-                FairPanel.show();
+        socket.on("fair message", (username, score) => {
+            if(Authentication.getUser().username == username){
+                FairPanel.show(score);
+            }
         });
 
-        socket.on("lose message", (username) => {
-            if(Authentication.getUser().username == username)
-                LosePanel.show();
+        socket.on("lose message", (username, score) => {
+            if(Authentication.getUser().username == username){
+                LosePanel.show(score);
+            }
+        });
+
+        socket.on("update leaderboard", (records) => {
+            LeaderboardPanel.update(records);
         });
 
     };

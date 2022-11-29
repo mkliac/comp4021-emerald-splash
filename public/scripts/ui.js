@@ -191,18 +191,22 @@ const LeaderboardPanel = (function() {
         $("#leaderboard-panel").fadeOut(500);
     };
 
-    const update = function(players) {
+    const update = function(records) {
         leaderboardList.empty();
 
-        for (const player of players){
-            addPlayer(player);
+        records = records.sort(function(a,b){
+            return b[1] - a[1];
+        });
+
+        for (const record of records){
+            addPlayer(record);
         }
     };
 
     const addPlayer = function(player) {
         //Todo: player name & its win rate
         leaderboardList.append(
-            $("<div></div>")
+            $("<div>" + player[0] + player[1].toString() + "</div>")
         );
 
         leaderboardList.scrollTop(leaderboardList[0].scrollHeight);
@@ -220,10 +224,23 @@ const WinPanel = (function(){
             GamePanel.hide();
             MenuPanel.show();
         });
+
+        $("#win-panel-restart").on("click", () => {
+            hide();
+            GamePanel.hide();
+            MenuPanel.show();
+            StartPanel.show();
+        });
+
+        $("#win-panel-leaderboard").on("click", () => {
+            LeaderboardPanel.show();
+        });
     };
 
-    const show = function(){
+    const show = function(score){
         $("#win-panel").fadeIn(500);
+        $("#win-score-number").text("");
+        $("#win-score-number").text(score.toString());
     };
 
     const hide = function(){
@@ -242,10 +259,23 @@ const FairPanel = (function(){
             GamePanel.hide();
             MenuPanel.show();
         });
+
+        $("#fair-panel-restart").on("click", () => {
+            hide();
+            GamePanel.hide();
+            MenuPanel.show();
+            StartPanel.show();
+        });
+
+        $("#fair-panel-leaderboard").on("click", () => {
+            LeaderboardPanel.show();
+        });
     };
 
-    const show = function(){
+    const show = function(score){
         $("#fair-panel").fadeIn(500);
+        $("#fair-score-number").text("");
+        $("#fair-score-number").text(score.toString());
     };
 
     const hide = function(){
@@ -264,10 +294,23 @@ const LosePanel = (function(){
             GamePanel.hide();
             MenuPanel.show();
         });
+
+        $("#lose-panel-restart").on("click", () => {
+            hide();
+            GamePanel.hide();
+            MenuPanel.show();
+            StartPanel.show();
+        });
+
+        $("#lose-panel-leaderboard").on("click", () => {
+            LeaderboardPanel.show();
+        });
     };
 
-    const show = function(){
+    const show = function(score){
         $("#lose-panel").fadeIn(500);
+        $("#lose-score-number").text("");
+        $("#lose-score-number").text(score.toString());
     };
 
     const hide = function(){

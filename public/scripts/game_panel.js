@@ -1,6 +1,6 @@
 const GamePanel = (function() {
     
-    const totalGameTime = 100;
+    const totalGameTime = 10;
     const gemMaxAge = 3000;
     const arrowMaxAge = 2500;
     const bombMaxAge = 1500;

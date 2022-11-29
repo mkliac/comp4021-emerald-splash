@@ -55,6 +55,11 @@ app.post("/register", (req, res) => {
 
     fs.writeFileSync("data/users.json", JSON.stringify(users, null, " "));
 
+    const records = JSON.parse(fs.readFileSync("data/records.json"));
+    let record = [username,0];
+    records.push(record);
+    fs.writeFileSync("data/records.json", JSON.stringify(records, null, " "));
+
     res.json({status: "success"});
 
 });
@@ -124,6 +129,8 @@ io.on("connection", (socket) => {
         onlineUsers[username] = {name};
 
         io.emit("add user", JSON.stringify(socket.request.session.user));
+        const records = JSON.parse(fs.readFileSync("data/records.json","utf-8"));
+        socket.emit("update leaderboard", records);
     }
 
     socket.on("disconnect", () => {
@@ -132,14 +139,15 @@ io.on("connection", (socket) => {
             if(onlineUsers[username]) delete onlineUsers[username];
 
             pairUpQueue.splice(pairUpQueue.indexOf(username), 1);
-            // io.emit("remove user", JSON.stringify(socket.request.session.user));
         }
     })
 
     socket.on("enter pair-up queue", () => {
         const {username} = socket.request.session.user;
-        pairUpQueue.push(username);
+        if(pairUpQueue.length == 0 || pairUpQueue[0] != username) 
+            pairUpQueue.push(username);
 
+        console.log(pairUpQueue);
         if(pairUpQueue.length >= 2){
             const players = {
                 player1: pairUpQueue[0],
@@ -200,23 +208,39 @@ io.on("connection", (socket) => {
             results[username] = score;
             return;
         }
+        
+        const records = JSON.parse(fs.readFileSync("data/records.json","utf-8"));
+
         if(results[opponentUsername] > score){
-            //Todo save win & lose to record
-            io.emit("win message", opponentUsername);
-            io.emit("lose message", username);
+            for(let i = 0; i < records.length; i++){
+                if(records[i][0] == opponentUsername){
+                    records[i][1] += 1;
+                    break;
+                }
+            }
+            io.emit("update leaderboard", records);
+
+            io.emit("win message", opponentUsername, results[opponentUsername]);
+            io.emit("lose message", username, score);
         }else if(results[opponentUsername] == score){
-            //Todo save win & lose to record
-            io.emit("fair message", opponentUsername);
-            io.emit("fair message", username);
+            io.emit("fair message", opponentUsername, results[opponentUsername]);
+            io.emit("fair message", username, score);
         }else{
-            //Todo save win & lose to record
-            io.emit("lose message", opponentUsername);
-            io.emit("win message", username);
+            for(let i = 0; i < records.length; i++){
+                if(records[i][0] == username){
+                    records[i][1] += 1;
+                    break;
+                }
+            }
+            io.emit("update leaderboard", records);
+
+            io.emit("lose message", opponentUsername, results[opponentUsername]);
+            io.emit("win message", username, score);
         }
 
         delete results[opponentUsername];
 
-        //Todo: update clients leaderboard
+        fs.writeFileSync("data/records.json", JSON.stringify(records, null, " "));
     })
 
 });

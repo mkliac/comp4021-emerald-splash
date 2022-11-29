@@ -361,3 +361,7 @@ canvas, #game-start, #game-over {
     left: calc(50vw - 357px);
     width: 714px;
 }
+
+#leaderboard-list{
+    display: block;
+}
