@@ -10,5 +10,13 @@
  "kitty": {
   "name": "kitty",
   "password": "$2b$10$b.FiDmQBcTfZxBy3raN5Quf/4cYPbyrhxS4r2ofDXbdPCNdZaFIKm"
+ },
+ "mouse": {
+  "name": "mouse",
+  "password": "$2b$10$fjzzJHg4CSm4PO7PUB.MpuYcTMcHlq/lS5HMlCFTPKMTlT176koVe"
+ },
+ "turkey": {
+  "name": "turkey",
+  "password": "$2b$10$IlN.PaVGoPK4i3vmksJUHuF07Z8ZRWUFF3KG7yRZPCZUDAmbOFwES"
  }
 }
