@@ -31,6 +31,9 @@ Triggers automatically when collected
 **Boot (buff)** - Increase the walking speed of player  
 Triggers automatically when collected  
   
+**Potion (buff)** - Slows down the walking speed of the opponent  
+Triggers automatically when collected  
+  
 **Shield (buff)** - Protects player from attacks for 5 seconds  
 Triggers automatically when collected  
   
