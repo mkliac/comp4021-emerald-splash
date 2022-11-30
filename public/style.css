@@ -190,6 +190,20 @@ button.icon:active {
     color: var(--title-color);
     user-select: none;
 }
+#help-panel {
+    max-height: 100vh;
+    overflow: scroll;
+}
+#help-flexbox div {
+    font-size: 1.5em;
+    text-align: justify;
+}
+#help-flexbox button {
+    padding: 5px 20px;
+}
+#tutorial-content{
+    max-width: 815px;
+}
 #user-panel {
     padding: 10px;
     display:flex;

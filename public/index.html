@@ -28,10 +28,45 @@
         <div id="pairing-text">Please Wait For the Paring</div>
         <button id="start-panel-exit">X</button>
     </div>
-    <div id="help-panel" class="overlay row">
-        <div id="tutorial-title">Tutorial</div>
-        <div id="tutorial-content">Guideline</div>
-        <button id="help-panel-exit">X</button>
+    <div id="help-panel" class="overlay">
+        <div id="help-flexbox" class="col">
+            <div id="tutorial-title"><b>Tutorial</b></div>
+            <div id="tutorial-content">
+                The goal of the game is to collect more gems than your opponent.
+                Use arrow keys to move around and collect gems, weapons and buffs.
+                The items you collect are shown in the inventory at the top.
+                To use your weapons and deal damage to your opponent,
+                press the corresponding key marked in the inventory.
+                Remember each player only have 5 lives, once yours are uesd up, you cannot move anymore.
+                <br><br>    
+            </div>
+            <div id="item-description-title"><b>Item Details</b></div>
+            <div id="item-description-content">
+                <b>Gem</b> - The score of your game <br>
+                <br>
+                <b>Fire (weapon)</b> - Creates a burning tile on enemy's field that lasts for the whole game<br>
+                Press A to use<br>
+                <br>
+                <b>Bomb (weapon)</b> - Creates a 3x3 explosion 1 second after using<br>
+                Press S to use<br>
+                <br>
+                <b>Arrow (weapon)</b> - Summons 4 arrows that are aimed at the enemy<br>
+                Press D to use<br>
+                <br>
+                <b>Zombie (weapon)</b> - Summons a zombie that chases after the enemy<br>
+                Triggers automatically when collected<br>
+                <br>
+                <b>Boot (buff)</b> - Increase the walking speed of player<br>
+                Triggers automatically when collected<br>
+                <br>
+                <b>Shield (buff)</b> - Protects player from attacks for 5 seconds<br>
+                Triggers automatically when collected<br>
+                <br>
+                <b>Ring (buff)</b> - Doubles the worth of gems collected in the next 5 seconds<br>
+                Triggers automatically when collected
+            </div>
+            <button id="help-panel-exit">X</button>
+        </div>
     </div>
     <div id="leaderboard-panel" class="overlay" style="z-index: 1;">
         <div id="leaderboard-title">Leaderboard</div>
