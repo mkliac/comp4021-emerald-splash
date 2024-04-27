@@ -45,4 +45,4 @@ Press space for cheating.
 effect: instant Ring ang Shield buff.  
 
 ## Demo  
-[link](https://www.youtube.com/watch?v=DWMRZWCGvHc)
+[YouTube Demo Link](https://www.youtube.com/watch?v=DWMRZWCGvHc)
